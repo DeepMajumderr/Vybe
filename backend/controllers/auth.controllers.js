@@ -15,6 +15,10 @@ export const signup = async (req, res) => {
             return res.status(400).json({ message: "UserName already exists!" })
         }
 
+        if (password.length < 6) {
+            return res.status(400).json({ message: "Password must be atleat 6 characters !" })
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10)
 
         const user = await User.create({
@@ -36,6 +40,46 @@ export const signup = async (req, res) => {
         return res.status(201).json(user)
 
     } catch (error) {
-        return res.status(500).json({message: `Signup error ${error}`})
+        return res.status(500).json({ message: `Signup error ${error}` })
+    }
+}
+
+export const signin = async (req, res) => {
+    try {
+        const { password, userName } = req.body
+
+        const user = await User.findOne({ userName })
+        if (!user) {
+            return res.status(400).json({ message: "User not found !" })
+        }
+
+        const isMatch = bcrypt.compare(password, user.password)
+
+        if (!isMatch) {
+            return res.status(400).json({ message: "Incorrect Password  !" })
+        }
+
+        const token = await genToken(user._id)
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 10 * 365 * 24 * 60 * 60 * 1000,
+            secure: false,
+            sameSite: "Strict"
+        })
+
+        return res.status(200).json(user)
+
+    } catch (error) {
+        return res.status(500).json({ message: `Signin error ${error}` })
+    }
+}
+
+export const signout = async (req, res) => {
+    try {
+        res.clearCookie("token")
+        return res.status(200).json({ message: "signed out successfully" })
+    } catch (error) {
+        return res.status(500).json({ message: `Signin error ${error}` })
     }
 }
