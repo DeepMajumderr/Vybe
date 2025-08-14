@@ -1,7 +1,8 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Signup from './pages/signup'
+import Signup from './pages/Signup'
 import Signin from './pages/Signin'
+export const serverUrl = "http://localhost:8000"
 
 const App = () => {
   return (
