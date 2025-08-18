@@ -7,6 +7,8 @@ import axios from 'axios'
 import { serverUrl } from '../App';
 import { ClipLoader } from "react-spinners"
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../redux/userSlice';
 
 const Signin = () => {
 
@@ -21,6 +23,7 @@ const Signin = () => {
   const [error, seterror] = useState("")
   const [loading, setloading] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleSignIn = async () => {
     setloading(true)
@@ -32,7 +35,7 @@ const Signin = () => {
       )
       setuserName("")
       setpassword("")
-      console.log(result.data)
+      dispatch(setUserData(result.data))
       setloading(false)
     } catch (error) {
       console.log(error)
