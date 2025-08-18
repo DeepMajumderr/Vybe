@@ -23,10 +23,12 @@ const Signup = () => {
   const [email, setemail] = useState("")
   const [password, setpassword] = useState("")
   const [loading, setloading] = useState(false)
+  const [error, seterror] = useState("")
   const navigate = useNavigate()
 
   const handleSignup = async () => {
     setloading(true)
+    seterror("")
     try {
       const result = await axios.post(`${serverUrl}/api/auth/signup`,
         { name, userName, email, password },
@@ -34,7 +36,12 @@ const Signup = () => {
       )
       console.log(result.data)
       setloading(false)
+      setname("")
+      setuserName("")
+      setemail("")
+      setpassword("")
     } catch (error) {
+      seterror(error.response?.data?.message)
       console.log(error)
       setloading(false)
     }
@@ -62,7 +69,7 @@ const Signup = () => {
             onClick={() => setinputClicked({ ...inputClicked, name: true })}>
 
             <label htmlFor='name' className={`text-gray-700 absolute left-[20px]
-             p-[5px] bg-white text-[15px] ${inputClicked.name ? "top-[-15px]" : ""}`}>
+             p-[5px] bg-white text-[15px] ${inputClicked.name ? "top-[-18px]" : ""}`}>
               Enter Your Name
             </label>
             <input onChange={(e) => setname(e.target.value)}
@@ -76,7 +83,7 @@ const Signup = () => {
             onClick={() => setinputClicked({ ...inputClicked, userName: true })}>
 
             <label htmlFor='userName' className={`text-gray-700 absolute left-[20px]
-             p-[5px] bg-white text-[15px] ${inputClicked.userName ? "top-[-15px]" : ""}`}>
+             p-[5px] bg-white text-[15px] ${inputClicked.userName ? "top-[-18px]" : ""}`}>
               Enter Username
             </label>
             <input onChange={(e) => setuserName(e.target.value)}
@@ -90,7 +97,7 @@ const Signup = () => {
             onClick={() => setinputClicked({ ...inputClicked, email: true })}>
 
             <label htmlFor='email' className={`text-gray-700 absolute left-[20px]
-             p-[5px] bg-white text-[15px] ${inputClicked.email ? "top-[-15px]" : ""}`}>
+             p-[5px] bg-white text-[15px] ${inputClicked.email ? "top-[-18px]" : ""}`}>
               Enter Email
             </label>
             <input onChange={(e) => setemail(e.target.value)}
@@ -104,7 +111,7 @@ const Signup = () => {
             onClick={() => setinputClicked({ ...inputClicked, password: true })}>
 
             <label htmlFor='password' className={`text-gray-700 absolute left-[20px]
-             p-[5px] bg-white text-[15px] ${inputClicked.password ? "top-[-15px]" : ""}`}>
+             p-[5px] bg-white text-[15px] ${inputClicked.password ? "top-[-18px]" : ""}`}>
               Enter Password
             </label>
             <input onChange={(e) => setpassword(e.target.value)}
@@ -124,15 +131,20 @@ const Signup = () => {
 
           </div>
 
+          {
+            error && <p className='text-red-500'>{error}</p>
+          }
+
+
           <button className='w-[70%] px-[20px] py-[10px] bg-black text-white
             font-semibold h-[50px] cursor-pointer rounded-2xl mt-[20px]'
             onClick={handleSignup} disabled={loading}>
             {loading ? <ClipLoader size={30} color='white' /> : "Sign Up"}
           </button>
 
-          <p 
-          onClick={() => navigate("/signin")}
-          className='cursor-pointer text-gray-800'>
+          <p
+            onClick={() => navigate("/signin")}
+            className='cursor-pointer text-gray-800'>
             Already Have An Account ?
             <span className='border-b-2 border-b-black pb-[3px] text-black'>
               {' '}Sign In

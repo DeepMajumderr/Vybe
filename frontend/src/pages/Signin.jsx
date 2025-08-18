@@ -18,21 +18,26 @@ const Signin = () => {
   const [showPassword, setshowPassword] = useState(false)
   const [userName, setuserName] = useState("")
   const [password, setpassword] = useState("")
+  const [error, seterror] = useState("")
   const [loading, setloading] = useState(false)
   const navigate = useNavigate()
 
   const handleSignIn = async () => {
     setloading(true)
+    seterror("")
     try {
       const result = await axios.post(`${serverUrl}/api/auth/signin`,
         { userName, password },
         { withCredentials: true }
       )
+      setuserName("")
+      setpassword("")
       console.log(result.data)
       setloading(false)
     } catch (error) {
       console.log(error)
       setloading(false)
+      seterror(error.response?.data?.message)
     }
   }
 
@@ -98,6 +103,10 @@ const Signin = () => {
             Forgot password ? Click here
           </div>
 
+          {
+            error && <p className='text-red-500'>{error}</p>
+          }
+
           <button className='w-[70%] px-[20px] py-[10px] bg-black text-white
             font-semibold h-[50px] cursor-pointer rounded-2xl mt-[20px]'
             onClick={handleSignIn} disabled={loading}>
@@ -107,7 +116,7 @@ const Signin = () => {
           <p
             onClick={() => navigate("/signup")}
             className='cursor-pointer text-gray-800'>
-            Create A New Account ? 
+            Create A New Account ?
             <span className='border-b-2 border-b-black pb-[3px] text-black'>
               {' '}Sign Up
             </span>

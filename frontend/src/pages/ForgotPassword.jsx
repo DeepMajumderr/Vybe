@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { ClipLoader } from 'react-spinners'
+import axios from 'axios'
+import { serverUrl } from '../App'
 
 const ForgotPassword = () => {
 
-    const [step, setstep] = useState(3)
+    const [step, setstep] = useState(1)
     const [inputClicked, setinputClicked] = useState({
         email: false,
         otp: false,
@@ -15,6 +17,60 @@ const ForgotPassword = () => {
     const [loading, setloading] = useState(false)
     const [newPassword, setnewPassword] = useState("")
     const [confirmNewPassword, setconfirmNewPassword] = useState("")
+    const [error, seterror] = useState("")
+
+    const handleStep1 = async () => {
+        setloading(true)
+        seterror("")
+        try {
+            const result = await axios.post(`${serverUrl}/api/auth/sendOtp`,
+                { email }, { withCredentials: true })
+            console.log(result.data)
+            setstep(2)
+            setloading(false)
+        } catch (error) {
+            console.log(error)
+            setloading(false)
+            seterror(error.response?.data?.message)
+        }
+    }
+
+    const handleStep2 = async () => {
+        setloading(true)
+        seterror("")
+        try {
+            const result = await axios.post(`${serverUrl}/api/auth/verifyOtp`,
+                { email, otp }, { withCredentials: true })
+            console.log(result.data)
+            setloading(false)
+            setstep(3)
+        } catch (error) {
+            console.log(error)
+            setloading(false)
+            seterror(error.response?.data?.message)
+        }
+    }
+
+    const handleStep3 = async () => {
+        if (newPassword !== confirmNewPassword) {
+            return seterror('passwords do not match')
+        }
+        seterror("")
+        setloading(true)
+        try {
+
+            const result = await axios.post(`${serverUrl}/api/auth/resetPassword`,
+                { email, password: newPassword }, { withCredentials: true })
+            console.log(result.data)
+            setloading(false)
+            setnewPassword("")
+            setconfirmNewPassword("")
+        } catch (error) {
+            console.log(error)
+            setloading(false)
+            seterror(error.response?.data?.message)
+        }
+    }
 
     return (
         <div className='w-full h-screen bg-gradient-to-b from-black to-gray-900
@@ -41,9 +97,13 @@ const ForgotPassword = () => {
                             rounded-2xl px-[20px] outline-none border-0 required' />
                     </div>
 
+                    {
+                        error && <p className='text-red-500'>{error}</p>
+                    }
+
                     <button className='w-[70%] px-[20px] py-[10px] bg-black text-white
                         font-semibold h-[50px] cursor-pointer rounded-2xl mt-[20px]'
-                        disabled={loading}>
+                        disabled={loading} onClick={handleStep1}>
                         {loading ? <ClipLoader size={30} color='white' /> : "Send OTP"}
                     </button>
                 </div>
@@ -70,9 +130,13 @@ const ForgotPassword = () => {
                             rounded-2xl px-[20px] outline-none border-0 required' />
                     </div>
 
+                    {
+                        error && <p className='text-red-500'>{error}</p>
+                    }
+
                     <button className='w-[70%] px-[20px] py-[10px] bg-black text-white
                         font-semibold h-[50px] cursor-pointer rounded-2xl mt-[20px]'
-                        disabled={loading}>
+                        disabled={loading} onClick={handleStep2}>
                         {loading ? <ClipLoader size={30} color='white' /> : "Submit"}
                     </button>
                 </div>
@@ -113,9 +177,13 @@ const ForgotPassword = () => {
                             rounded-2xl px-[20px] outline-none border-0 required' />
                     </div>
 
+                    {
+                        error && <p className='text-red-500'>{error}</p>
+                    }
+
                     <button className='w-[70%] px-[20px] py-[10px] bg-black text-white
                         font-semibold h-[50px] cursor-pointer rounded-2xl mt-[20px]'
-                        disabled={loading}>
+                        disabled={loading} onClick={handleStep3}>
                         {loading ? <ClipLoader size={30} color='white' /> : "Reset Password"}
                     </button>
                 </div>
