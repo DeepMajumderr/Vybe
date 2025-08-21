@@ -2,6 +2,7 @@ import React from 'react'
 import logo from "../assets/white_logo.png"
 import { FaRegHeart } from "react-icons/fa";
 import StoryDp from './StoryDp';
+import Nav from './Nav';
 
 const Feed = () => {
   return (
@@ -16,17 +17,25 @@ const Feed = () => {
         </div>
       </div>
 
-      <div className='flex w-full overflow-auto gap-[20px] items-center
+      <div className='flex w-full justify-start overflow-x-auto gap-[10px] items-center
        p-[20px]'>
-          <StoryDp userName={"bfh"}/>
-          <StoryDp userName={"bfh"}/>
-          <StoryDp userName={"bfh"}/>
-          <StoryDp userName={"bfh"}/>
-          <StoryDp userName={"bfh"}/>
-          <StoryDp userName={"bfh"}/>
-          <StoryDp userName={"bfh"}/>
-          <StoryDp userName={"bfh"}/>
-          <StoryDp userName={"bfh"}/>
+        <StoryDp userName={"bfh"} />
+        <StoryDp userName={"bfh"} />
+        <StoryDp userName={"bfh"} />
+        <StoryDp userName={"bfhbhnhmjmj"} />
+        <StoryDp userName={"bfh"} />
+        <StoryDp userName={"bfh"} />
+        <StoryDp userName={"bfh"} />
+        <StoryDp userName={"bfh"} />
+        <StoryDp userName={"bfh"} />
+      </div>
+
+      <div className='w-full min-h-[100vh] flex flex-col items-center
+      gap-[20px] p-[10px] pt-[40px] bg-white rounded-t-[60px] relative
+      pb-[120px]'>
+
+        <Nav />
+
       </div>
 
     </div>

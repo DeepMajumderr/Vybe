@@ -7,7 +7,7 @@ const OtherUsers = ({ user }) => {
     const { userData } = useSelector(state => state.user)
 
     return (
-        <div className='w-full h-[80px] flex items-center justify-between border-b-2
+        <div className='w-full h-[70px] flex items-center justify-between border-b-2
         border-gray-800'>
             <div className='flex items-center gap-[10px]'>
 

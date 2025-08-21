@@ -1,0 +1,42 @@
+import React from 'react'
+import { IoHome } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
+import { RiVideoChatFill } from "react-icons/ri";
+import { FaRegSquarePlus } from "react-icons/fa6";
+import dp from "../assets/dp.jpg"
+
+
+const Nav = () => {
+
+    return (
+        <div className='w-[90%] lg:w-[40%] h-[70px] bg-black flex
+        justify-around items-center fixed bottom-[20px] rounded-full
+        shadow-2xl shadow-[#000000] z-[100]'>
+
+            <div>
+                <IoHome className='text-white w-[25px] h-[25px]' />
+            </div>
+
+            <div>
+                <FaSearch className='text-white w-[25px] h-[25px]' />
+            </div>
+
+            <div>
+                <FaRegSquarePlus className='text-white w-[25px] h-[25px]' />
+            </div>
+
+            <div>
+                <RiVideoChatFill className='text-white w-[25px] h-[25px]' />
+            </div>
+
+            <div className='w-[40px] h-[40px] border-2 border-black
+            rounded-full cursor-pointer overflow-hidden'>
+                <img src={dp} alt=""
+                    className='w0-full object-cover' />
+            </div>
+
+        </div>
+    )
+}
+
+export default Nav

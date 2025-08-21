@@ -4,7 +4,7 @@ import dp from "../assets/dp.jpg"
 const StoryDp = ({ profileImage, userName }) => {
 
     return (
-        <div >
+        <div className='flex flex-col w-[80px]'>
 
             <div className='w-[70px] h-[70px] bg-gradient-to-b from-blue-500
             to-blue-950 rounded-full flex justify-center items-center'>
