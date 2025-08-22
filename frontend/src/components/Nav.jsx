@@ -4,9 +4,14 @@ import { FaSearch } from "react-icons/fa";
 import { RiVideoChatFill } from "react-icons/ri";
 import { FaRegSquarePlus } from "react-icons/fa6";
 import dp from "../assets/dp.jpg"
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 const Nav = () => {
+
+    const navigate = useNavigate()
+    const { userData } = useSelector(state => state.user)
 
     return (
         <div className='w-[90%] lg:w-[40%] h-[70px] bg-black flex
@@ -30,7 +35,8 @@ const Nav = () => {
             </div>
 
             <div className='w-[40px] h-[40px] border-2 border-black
-            rounded-full cursor-pointer overflow-hidden'>
+            rounded-full cursor-pointer overflow-hidden'
+                onClick={() => navigate(`/profile/${userData.userName}`)}>
                 <img src={dp} alt=""
                     className='w0-full object-cover' />
             </div>

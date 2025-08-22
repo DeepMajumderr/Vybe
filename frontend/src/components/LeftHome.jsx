@@ -47,7 +47,7 @@ const LeftHome = () => {
           <div className='w-[70px] h-[70px] border-2 border-black
         rounded-full cursor-pointer overflow-hidden'>
             <img src={userData.profileImage || dp} alt=""
-              className='w0-full object-cover' />
+              className='w-full object-cover' />
           </div>
 
           <div>
