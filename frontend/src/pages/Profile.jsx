@@ -1,18 +1,20 @@
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import { serverUrl } from '../App'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setProfileData, setUserData } from '../redux/userSlice'
 import { MdKeyboardBackspace } from "react-icons/md";
 import dp from "../assets/dp.jpg"
+import Nav from '../components/Nav'
 
 
 const Profile = () => {
 
     const { userName } = useParams()
     const dispatch = useDispatch()
-    const { profileData } = useSelector(state => state.user)
+    const navigate = useNavigate()
+    const { profileData, userData } = useSelector(state => state.user)
 
     const handleProfile = async () => {
         try {
@@ -51,7 +53,7 @@ const Profile = () => {
             <div className='text-white w-full h-[80px] flex justify-between
             items-center px-[30px]'>
 
-                <div>
+                <div onClick={()=>navigate("/")}>
                     <MdKeyboardBackspace className='text-white w-[25px]
                     h-[25px] cursor-pointer' />
                 </div>
@@ -95,25 +97,140 @@ const Profile = () => {
                     font-semibold'>
                         {profileData?.posts.length}
                     </div>
-                    <div className='text-[18px] md:text-[22px] text-[#ffffffc7]'>
+                    <div className='text-[18px] md:text-[18px] text-[#ffffffc7]'>
                         Posts</div>
                 </div>
 
                 <div>
                     <div className='flex items-center justify-center gap-[20px]'>
-                        <div>
-                            {profileData?.followers.slice(0,3)}
+
+                        <div className='flex relative'>
+                            {/* {profileData?.followers?.slice(0, 3).map((follower, index) => {
+                                <div className='w-[60px] h-[60px] md:w-[100px] md:h-[100px] border-2 border-black
+                        rounded-full cursor-pointer overflow-hidden '>
+                                    <img src={profileData?.profileImage || dp} alt=""
+                                        className='w-full object-cover' />
+                                </div>
+                            })} */}
+                            <div className='w-[40px] h-[40px]  border-2 border-black
+                            rounded-full cursor-pointer overflow-hidden '>
+                                <img src={profileData?.profileImage || dp} alt=""
+                                    className='w-full object-cover' />
+                            </div>
+
+                            <div className='w-[40px] h-[40px] absolute  border-2 border-black
+                            rounded-full cursor-pointer overflow-hidden left-[9px] '>
+                                <img src={profileData?.profileImage || dp} alt=""
+                                    className='w-full object-cover' />
+                            </div>
+
+                            <div className='w-[40px] h-[40px]  border-2 border-black
+                            rounded-full cursor-pointer overflow-hidden absolute left-[18px] '>
+                                <img src={profileData?.profileImage || dp} alt=""
+                                    className='w-full object-cover' />
+                            </div>
+
                         </div>
-                        <div>
+
+                        <div className='text-white text-[22px] md:text-[30px]
+                        font-semibold'>
+
+                            {profileData?.followers.length}
 
                         </div>
                     </div>
-                    <div>Followers</div>
+
+                    <div className='text-[18px] md:text-[18px] text-[#ffffffc7]'>
+                        Followers
+                    </div>
+
                 </div>
 
                 <div>
-                    <div></div>
-                    <div>Following</div>
+
+                    <div className='flex items-center justify-center gap-[20px]'>
+
+                        <div className='flex relative'>
+                            {/* {profileData?.followers?.slice(0, 3).map((follower, index) => {
+                                <div className='w-[60px] h-[60px] md:w-[100px] md:h-[100px] border-2 border-black
+                        rounded-full cursor-pointer overflow-hidden '>
+                                    <img src={profileData?.profileImage || dp} alt=""
+                                        className='w-full object-cover' />
+                                </div>
+                            })} */}
+                            <div className='w-[40px] h-[40px]  border-2 border-black
+                            rounded-full cursor-pointer overflow-hidden '>
+                                <img src={profileData?.profileImage || dp} alt=""
+                                    className='w-full object-cover' />
+                            </div>
+
+                            <div className='w-[40px] h-[40px] absolute  border-2 border-black
+                            rounded-full cursor-pointer overflow-hidden left-[9px] '>
+                                <img src={profileData?.profileImage || dp} alt=""
+                                    className='w-full object-cover' />
+                            </div>
+
+                            <div className='w-[40px] h-[40px]  border-2 border-black
+                            rounded-full cursor-pointer overflow-hidden absolute left-[18px] '>
+                                <img src={profileData?.profileImage || dp} alt=""
+                                    className='w-full object-cover' />
+                            </div>
+
+                        </div>
+
+                        <div className='text-white text-[22px] md:text-[30px]
+                        font-semibold'>
+
+                            {profileData?.following.length}
+
+                        </div>
+
+                    </div>
+
+                    <div className='text-[18px] md:text-[18px] text-[#ffffffc7]'>
+                        Following
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className='w-full h-[80px] flex justify-center items-center gap-[20px]'>
+
+                {
+                    profileData?._id == userData?._id &&
+
+                    <button onClick={()=>navigate("/editprofile")}
+                    className='mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px]
+                    bg-[white] cursor-pointer rounded-2xl'>
+                        Edit Profile
+                    </button>
+                }
+
+                {
+                    profileData?._id != userData?._id &&
+                    <>
+                        <button className='mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px]
+                        bg-[white] cursor-pointer rounded-2xl'>
+                            Follow
+                        </button>
+
+                        <button className='mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px]
+                        bg-[white] cursor-pointer rounded-2xl'>
+                            Message
+                        </button>
+                    </>
+                }
+
+            </div>
+
+            <div className='w-full min-h-[100vh]  flex justify-center'>
+
+                <div className='w-full max-w-[900px] flex flex-col items-center rounded-t-[30px]
+                bg-white relative gap-[20px] pt-[30px]'>
+
+                    <Nav />
+
                 </div>
 
             </div>
