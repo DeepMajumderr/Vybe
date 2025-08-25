@@ -18,7 +18,7 @@ const Nav = () => {
         justify-around items-center fixed bottom-[20px] rounded-full
         shadow-2xl shadow-[#000000] z-[100]'>
 
-            <div>
+            <div onClick={() => navigate("/")}>
                 <IoHome className='text-white w-[25px] h-[25px]' />
             </div>
 
@@ -37,7 +37,7 @@ const Nav = () => {
             <div className='w-[40px] h-[40px] border-2 border-black
             rounded-full cursor-pointer overflow-hidden'
                 onClick={() => navigate(`/profile/${userData.userName}`)}>
-                <img src={dp} alt=""
+                <img src={userData.profileImage || dp} alt=""
                     className='w0-full object-cover' />
             </div>
 
