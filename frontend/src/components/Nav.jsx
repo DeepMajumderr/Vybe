@@ -19,19 +19,19 @@ const Nav = () => {
         shadow-2xl shadow-[#000000] z-[100]'>
 
             <div onClick={() => navigate("/")}>
-                <IoHome className='text-white w-[25px] h-[25px]' />
+                <IoHome className='text-white w-[25px] h-[25px] cursor-pointer' />
             </div>
 
             <div>
-                <FaSearch className='text-white w-[25px] h-[25px]' />
+                <FaSearch className='text-white w-[25px] h-[25px] cursor-pointer' />
+            </div>
+
+            <div onClick={()=>navigate("/upload")}>
+                <FaRegSquarePlus className='text-white w-[25px] h-[25px] cursor-pointer' />
             </div>
 
             <div>
-                <FaRegSquarePlus className='text-white w-[25px] h-[25px]' />
-            </div>
-
-            <div>
-                <RiVideoChatFill className='text-white w-[25px] h-[25px]' />
+                <RiVideoChatFill className='text-white w-[25px] h-[25px] cursor-pointer' />
             </div>
 
             <div className='w-[40px] h-[40px] border-2 border-black

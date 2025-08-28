@@ -9,6 +9,7 @@ import getCurrentUser from './hooks/getCurrentUser'
 import getSuggestedUsers from './hooks/getSuggestedUsers'
 import Profile from './pages/Profile'
 import EditProfile from './pages/EditProfile'
+import Upload from './pages/Upload'
 export const serverUrl = "http://localhost:8000"
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
       <Route path='/signin' element={!userData ? <Signin /> : <Navigate to={"/"} />} />
       <Route path='/' element={userData ? <Home /> : <Navigate to={"/signin"} />} />
       <Route path='/forgot-password' element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />} />
+      <Route path='/upload' element={userData ? <Upload /> : <Navigate to={"/signin"} />} />
       <Route path='/profile/:userName' element={userData ? <Profile /> : <Navigate to={"/signin"} />} />
       <Route path='/editprofile' element={userData ? <EditProfile /> : <Navigate to={"/signin"} />} />
     </Routes>
