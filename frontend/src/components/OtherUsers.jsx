@@ -17,7 +17,7 @@ const OtherUsers = ({ user }) => {
                     rounded-full cursor-pointer overflow-hidden'
                     onClick = {() => navigate(`/profile/${user.userName}`)}>
                     <img src={user.profileImage || dp} alt=""
-                        className='w0-full object-cover' />
+                        className='w-full object-cover' />
                 </div>
 
                 <div>
