@@ -6,7 +6,7 @@ import { getStoryByUserName, uploadStory, viewStory } from "../controllers/story
 
 const  storyRouter = express.Router()
 
-storyRouter.post("/upload",isAuth,upload.single("media"),uploadStory)
+storyRouter.post("/uploadStory",isAuth,upload.single("media"),uploadStory)
 storyRouter.get("/getByUserName/:userName",isAuth,getStoryByUserName)
 storyRouter.get("/view/:storyId",isAuth,viewStory)
 

@@ -7,7 +7,7 @@ import { comment, getAllLoops,like, uploadLoop } from "../controllers/loop.contr
 
 const  loopRouter = express.Router()
 
-loopRouter.post("/upload",isAuth,upload.single("media"),uploadLoop)
+loopRouter.post("/uploadLoop",isAuth,upload.single("media"),uploadLoop)
 loopRouter.get("/getAll",isAuth,getAllLoops)
 loopRouter.get("/like/:loopId",isAuth,like)
 loopRouter.post("/comment",isAuth,comment)
