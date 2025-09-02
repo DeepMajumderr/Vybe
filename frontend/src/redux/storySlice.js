@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 const storySlice = createSlice({
     name: "story",
     initialState: {
-        storyData: null
+        storyData: []
     },
     reducers: {
         setStoryData: (state, action) => {

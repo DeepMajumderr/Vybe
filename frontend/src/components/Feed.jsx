@@ -3,8 +3,13 @@ import logo from "../assets/white_logo.png"
 import { FaRegHeart } from "react-icons/fa";
 import StoryDp from './StoryDp';
 import Nav from './Nav';
+import { useSelector } from 'react-redux';
+import Post from './Post';
 
 const Feed = () => {
+
+  const {postData} = useSelector(state => state.post)
+
   return (
     <div className='lg:w-[50%] w-full bg-black min-h-[100vh]
     lg:h-[100vh] relative lg:overflow-y-auto'>
@@ -35,6 +40,13 @@ const Feed = () => {
       pb-[120px]'>
 
         <Nav />
+
+        {
+          postData?.map((post,index) => (
+            <Post postData={post} key={index} />
+          ))
+        }
+
 
       </div>
 

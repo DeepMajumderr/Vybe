@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 const loopSlice = createSlice({
     name: "loop",
     initialState: {
-        loopData:null
+        loopData:[]
     },
     reducers: {
         setLoopData: (state, action) => {

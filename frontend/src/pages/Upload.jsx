@@ -23,7 +23,7 @@ const Upload = () => {
     const { postData } = useSelector(state => state.post)
     const { storyData } = useSelector(state => state.story)
     const { loopData } = useSelector(state => state.loop)
-    const [loading, setloading] = useState(second)
+    const [loading, setloading] = useState(false)
 
     const handleMedia = (e) => {
         const file = e.target.files[0]
