@@ -5,7 +5,7 @@ import { FaVolumeXmark } from "react-icons/fa6";
 const VideoPlayer = ({ media }) => {
 
     const videoTag = useRef()
-    const [mute, setmute] = useState(false)
+    const [mute, setmute] = useState(true)
     const [isPlaying, setisPlaying] = useState(true)
    
 

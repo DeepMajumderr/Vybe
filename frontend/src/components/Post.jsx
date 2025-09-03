@@ -1,8 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import dp from "../assets/dp.jpg"
 import VideoPlayer from './VideoPlayer'
+import { IoMdHeartEmpty } from "react-icons/io";
+import { IoMdHeart } from "react-icons/io";
+import { useDispatch, useSelector } from 'react-redux';
+import { MdOutlineComment } from "react-icons/md";
+import { CiBookmark } from "react-icons/ci";
+import { FaBookmark } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
+import { serverUrl } from '../App';
+import { setPostData } from '../redux/postSlice';
+import axios from 'axios';
 
-const Post = ({ postData }) => {
+const Post = ({ post }) => {
+
+    const { userData } = useSelector(state => state.user)
+    const { postData } = useSelector(state => state.post)
+    const [showComment, setshowComment] = useState(true)
+    const dispatch = useDispatch()
+
+    const handleLike = async () => {
+        try {
+            const result = await axios.get(`${serverUrl}/api/post/like/${post._id}`,
+                { withCredentials: true })
+            const updatedPost = result.data
+
+            const updatedPosts = postData.map(p => p._id == updatedPost._id ? updatedPost : p)
+            dispatch(setPostData(updatedPosts))
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div className='w-[90%]  flex flex-col gap-[10px]
@@ -14,12 +43,12 @@ const Post = ({ postData }) => {
 
                     <div className='w-[60px] h-[60px] md:w-[60px] h-[60px] border-2 border-black
                 rounded-full cursor-pointer overflow-hidden'>
-                        <img src={postData.author?.profileImage || dp} alt=""
+                        <img src={post.author?.profileImage || dp} alt=""
                             className='w-full object-cover' />
                     </div>
 
                     <div className='w-[150px] font-semibold truncate'>
-                        {postData.author?.userName}
+                        {post.author?.userName}
                     </div>
 
                 </div>
@@ -36,23 +65,90 @@ const Post = ({ postData }) => {
                 flex  items-center justify-center '>
 
                 {
-                    postData.mediaType == "image" &&
+                    post.mediaType == "image" &&
                     <div className='w-[90%] 
                         flex items-center justify-center '>
-                        <img src={postData.media} alt="" className='w-[80%]
+                        <img src={post.media} alt="" className='w-[80%]
                             rounded-2xl  object-cover' />
                     </div>
                 }
 
                 {
-                    postData.mediaType == "video" &&
+                    post.mediaType == "video" &&
                     <div className='w-[80%]
                         flex flex-col items-center justify-center'>
-                        <VideoPlayer media={postData.media} />
+                        <VideoPlayer media={post.media} />
                     </div>
                 }
 
             </div>
+
+            <div className='w-full h-[60px] flex justify-between
+            items-center px-[20px] mt-[10px]'>
+
+                <div className='flex justify-center items-center gap-[10px]'>
+
+                    <div className='flex justify-center items-center gap-[5px]' onClick={handleLike} >
+                        {
+                            !post.likes.includes(userData._id) &&
+                            <IoMdHeartEmpty className='w-[25px] cursor-pointer h-[25px]' />
+                        }
+                        {
+                            post.likes.includes(userData._id) &&
+                            <IoMdHeart className='w-[25px] cursor-pointer h-[25px] text-red-600' />
+                        }
+                        <span>{post.likes.length}</span>
+                    </div>
+
+                    <div className='flex justify-center items-center gap-[5px]'>
+                        <MdOutlineComment className='w-[25px] cursor-pointer h-[25px]' />
+                        <span>{post.comments.length}</span>
+                    </div>
+
+                </div>
+
+                <div>
+                    {
+                        !userData.saved.includes(post?._id) &&
+                        <CiBookmark className='w-[25px] cursor-pointer h-[25px]' />
+                    }
+                    {
+                        userData.saved.includes(post?._id) &&
+                        <FaBookmark className='w-[25px] cursor-pointer h-[25px]' />
+                    }
+                </div>
+
+            </div>
+
+            {
+                post.caption &&
+                <div className='w-full px-[20px] gap-[10px]
+                flex justify-start items-center'>
+                    <h1>{post.author.userName}</h1>
+                    <div>{post.caption}</div>
+                </div>
+
+            }
+
+            {
+                showComment &&
+                <div className='w-full flex flex-col gap-[30px] pb-[20px]'>
+                    <div className='w-full h-[80px] flex items-center
+                    justify-between px-[20px] relative'>
+                        <div className='w-[60px] h-[60px] md:w-[60px] h-[60px] border-2 border-black
+                    rounded-full cursor-pointer overflow-hidden'>
+                            <img src={post.author?.profileImage || dp} alt=""
+                                className='w-full object-cover' />
+                        </div>
+                        <input type="text" className='px-[10px] border-b-2 border-b-gray-500 w-[90%]
+                        outline-none h-[40px]'placeholder='Write comment...' />
+                        <button className='absolute  right-[20px] cursor-pointer'>
+                            <IoMdSend className='w-[25px] h-[25px]' />
+                        </button>
+                    </div>
+
+                </div>
+            }
 
         </div>
     )
