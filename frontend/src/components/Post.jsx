@@ -11,12 +11,14 @@ import { IoMdSend } from "react-icons/io";
 import { serverUrl } from '../App';
 import { setPostData } from '../redux/postSlice';
 import axios from 'axios';
+import { setUserData } from '../redux/userSlice';
 
 const Post = ({ post }) => {
 
     const { userData } = useSelector(state => state.user)
     const { postData } = useSelector(state => state.post)
-    const [showComment, setshowComment] = useState(true)
+    const [showComment, setshowComment] = useState(false)
+    const [message, setmessage] = useState("")
     const dispatch = useDispatch()
 
     const handleLike = async () => {
@@ -32,6 +34,32 @@ const Post = ({ post }) => {
             console.log(error)
         }
     }
+
+    const handleComment = async () => {
+        try {
+            const result = await axios.post(`${serverUrl}/api/post/comment/${post._id}`,
+                { message }, { withCredentials: true })
+            const updatedPost = result.data
+
+            const updatedPosts = postData.map(p => p._id == updatedPost._id ? updatedPost : p)
+            dispatch(setPostData(updatedPosts))
+            setmessage("")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleSaved = async () => {
+        try {
+            const result = await axios.get(`${serverUrl}/api/post/saved/${post._id}`,
+                { withCredentials: true })
+            dispatch(setUserData(result.data))
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     return (
         <div className='w-[90%]  flex flex-col gap-[10px]
@@ -100,14 +128,15 @@ const Post = ({ post }) => {
                         <span>{post.likes.length}</span>
                     </div>
 
-                    <div className='flex justify-center items-center gap-[5px]'>
+                    <div className='flex justify-center items-center gap-[5px]'
+                        onClick={() => setshowComment(!showComment)}>
                         <MdOutlineComment className='w-[25px] cursor-pointer h-[25px]' />
                         <span>{post.comments.length}</span>
                     </div>
 
                 </div>
 
-                <div>
+                <div onClick={handleSaved}>
                     {
                         !userData.saved.includes(post?._id) &&
                         <CiBookmark className='w-[25px] cursor-pointer h-[25px]' />
@@ -141,10 +170,37 @@ const Post = ({ post }) => {
                                 className='w-full object-cover' />
                         </div>
                         <input type="text" className='px-[10px] border-b-2 border-b-gray-500 w-[90%]
-                        outline-none h-[40px]'placeholder='Write comment...' />
-                        <button className='absolute  right-[20px] cursor-pointer'>
+                        outline-none h-[40px]'placeholder='Write comment...' value={message}
+                            onChange={(e) => setmessage(e.target.value)} />
+                        <button className='absolute  right-[20px] cursor-pointer' onClick={handleComment}>
                             <IoMdSend className='w-[25px] h-[25px]' />
                         </button>
+                    </div>
+
+                    <div className='w-full max-h-[300px] overflow-auto'>
+
+                        {
+                            post.comments?.map((com, index) => (
+
+                                <div key={index}
+                                    className='w-full px-[20px] py-[20px] flex items-center gap-[20px]
+                                border-b-2 border-b-gray-200'>
+
+                                    <div className='w-[60px] h-[60px] md:w-[60px] h-[60px] border-2 border-black
+                                    rounded-full cursor-pointer overflow-hidden'>
+                                        <img src={com.author?.profileImage || dp} alt=""
+                                            className='w-full object-cover' />
+                                    </div>
+
+                                    <div>
+                                        {com.message}
+                                    </div>
+
+                                </div>
+
+                            ))
+                        }
+
                     </div>
 
                 </div>
