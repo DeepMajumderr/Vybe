@@ -7,11 +7,13 @@ import { setProfileData, setUserData } from '../redux/userSlice'
 import { MdKeyboardBackspace } from "react-icons/md";
 import dp from "../assets/dp.jpg"
 import Nav from '../components/Nav'
+import FollowButton from '../components/FollowButton'
 
 
 const Profile = () => {
 
     const { userName } = useParams()
+    console.log(userName)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { profileData, userData } = useSelector(state => state.user)
@@ -53,7 +55,7 @@ const Profile = () => {
             <div className='text-white w-full h-[80px] flex justify-between
             items-center px-[30px]'>
 
-                <div onClick={()=>navigate("/")}>
+                <div onClick={() => navigate("/")}>
                     <MdKeyboardBackspace className='text-white w-[25px]
                     h-[25px] cursor-pointer' />
                 </div>
@@ -70,6 +72,7 @@ const Profile = () => {
 
             <div className='w-full h-[150px] flex items-start gap-[20px]
             lg:gap-[50px] pt-[20px] px-[10px] justify-center'>
+
 
                 <div className='w-[80px] h-[80px] md:w-[100px] md:h-[100px] border-2 border-black
                         rounded-full cursor-pointer overflow-hidden '>
@@ -112,23 +115,17 @@ const Profile = () => {
                                         className='w-full object-cover' />
                                 </div>
                             })} */}
-                            <div className='w-[40px] h-[40px]  border-2 border-black
-                            rounded-full cursor-pointer overflow-hidden '>
-                                <img src={profileData?.profileImage || dp} alt=""
-                                    className='w-full object-cover' />
-                            </div>
+                            {profileData?.followers?.slice(0, 3).map((user, index) => (
 
-                            <div className='w-[40px] h-[40px] absolute  border-2 border-black
-                            rounded-full cursor-pointer overflow-hidden left-[9px] '>
-                                <img src={profileData?.profileImage || dp} alt=""
-                                    className='w-full object-cover' />
-                            </div>
+                                <div className={`w-[40px] h-[40px]  border-2 border-black
+                                rounded-full cursor-pointer overflow-hidden ${index>0 ? `absolute left-[${index*9}]
+                                ` : ""}`}>
+                                    <img src={user?.profileImage || dp} alt=""
+                                        className='w-full object-cover' />
+                                </div>
 
-                            <div className='w-[40px] h-[40px]  border-2 border-black
-                            rounded-full cursor-pointer overflow-hidden absolute left-[18px] '>
-                                <img src={profileData?.profileImage || dp} alt=""
-                                    className='w-full object-cover' />
-                            </div>
+                            ))}
+
 
                         </div>
 
@@ -200,8 +197,8 @@ const Profile = () => {
                 {
                     profileData?._id == userData?._id &&
 
-                    <button onClick={()=>navigate("/editprofile")}
-                    className='mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px]
+                    <button onClick={() => navigate("/editprofile")}
+                        className='mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px]
                     bg-[white] cursor-pointer rounded-2xl'>
                         Edit Profile
                     </button>
@@ -210,10 +207,11 @@ const Profile = () => {
                 {
                     profileData?._id != userData?._id &&
                     <>
-                        <button className='mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px]
-                        bg-[white] cursor-pointer rounded-2xl'>
-                            Follow
-                        </button>
+
+                        <FollowButton tailwind={'mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl'}
+                            targetUserId={profileData?._id}
+                            onFollowChange={handleProfile}
+                        />
 
                         <button className='mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px]
                         bg-[white] cursor-pointer rounded-2xl'>

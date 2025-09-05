@@ -12,6 +12,7 @@ import { serverUrl } from '../App';
 import { setPostData } from '../redux/postSlice';
 import axios from 'axios';
 import { setUserData } from '../redux/userSlice';
+import FollowButton from './FollowButton';
 
 const Post = ({ post }) => {
 
@@ -81,11 +82,12 @@ const Post = ({ post }) => {
 
                 </div>
 
-                <button className='px-[10px] w-[60px] md:w-[100px] py-[5px]
-                h-[30px] md:h-[40px] bg-[black] text-white rounded-2xl text-[14px]
-                md:text-[16px]'>
-                    Follow
-                </button>
+                {userData._id != post.author._id &&
+                    <FollowButton
+                        tailwind=
+                        {'px-[10px] w-[60px] md:w-[100px] py-[5px] h-[30px] md:h-[40px] bg-[black] text-white rounded-2xl text-[14px] md:text-[16px]'}
+                        targetUserId={post.author._id}
+                    />}
 
             </div>
 
