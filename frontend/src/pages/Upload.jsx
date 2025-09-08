@@ -8,7 +8,7 @@ import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setPostData } from '../redux/postSlice'
 import { setStoryData } from '../redux/storySlice'
-import { setloopData } from '../redux/loopSlice'
+import { setLoopData } from '../redux/loopSlice'
 import { ClipLoader } from 'react-spinners'
 
 const Upload = () => {
@@ -78,7 +78,7 @@ const Upload = () => {
             const result = await axios.post(`${serverUrl}/api/loop/uploadLoop`,
                 formData, { withCredentials: true })
 
-            dispatch(setloopData([...loopData, result.data]))
+            dispatch(setLoopData([...loopData, result.data]))
             setloading(false)
             navigate("/")
 
@@ -146,7 +146,8 @@ const Upload = () => {
                 border-gray-800 border-2 flex flex-col items-center justify-center gap-[8px]
                 mt-[15vh] rounded-2xl cursor-pointer hover:bg-[#353a3d]'
                     onClick={() => mediaInput.current.click()}>
-                    <input type="file" hidden ref={mediaInput}
+                    <input type="file" accept={uploadType == "loop" ? "video/* " : ""} 
+                    hidden ref={mediaInput}
                         onChange={handleMedia} />
                     <FaRegSquarePlus className='text-white w-[25px] h-[25px] cursor-pointer' />
                     <div className='text-white text-[19px] font-semibold'>Upload {uploadType}</div>

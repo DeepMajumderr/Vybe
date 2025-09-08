@@ -155,7 +155,9 @@ const Post = ({ post }) => {
                 post.caption &&
                 <div className='w-full px-[20px] gap-[10px]
                 flex justify-start items-center'>
-                    <h1>{post.author.userName}</h1>
+                    <h1 className="font-semibold text-[16px] text-gray-800">
+                        {post.author.userName}
+                    </h1>
                     <div>{post.caption}</div>
                 </div>
 

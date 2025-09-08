@@ -12,5 +12,5 @@ const loopSlice = createSlice({
     }
 })
 
-export const {setloopData} = loopSlice.actions
+export const {setLoopData} = loopSlice.actions
 export default loopSlice.reducer

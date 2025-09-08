@@ -30,7 +30,7 @@ const Nav = () => {
                 <FaRegSquarePlus className='text-white w-[25px] h-[25px] cursor-pointer' />
             </div>
 
-            <div>
+            <div  onClick={()=>navigate("/loops")}>
                 <RiVideoChatFill className='text-white w-[25px] h-[25px] cursor-pointer' />
             </div>
 
