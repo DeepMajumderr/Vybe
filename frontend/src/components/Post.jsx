@@ -85,7 +85,7 @@ const Post = ({ post }) => {
                 {userData._id != post.author._id &&
                     <FollowButton
                         tailwind=
-                        {'px-[10px] w-[60px] md:w-[100px] py-[5px] h-[30px] md:h-[40px] bg-[black] text-white rounded-2xl text-[14px] md:text-[16px]'}
+                        {'px-[10px]  w-[80px] md:w-[100px] py-[5px] h-[30px] md:h-[40px] bg-[black] text-white rounded-2xl text-[14px] md:text-[16px]'}
                         targetUserId={post.author._id}
                     />}
 
