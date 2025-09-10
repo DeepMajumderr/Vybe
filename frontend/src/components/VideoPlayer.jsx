@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaVolumeLow } from "react-icons/fa6";
 import { FaVolumeXmark } from "react-icons/fa6";
 
@@ -19,6 +19,32 @@ const VideoPlayer = ({ media }) => {
         }
     }
 
+      useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+          const video = videoTag.current
+          if (entry.isIntersecting) {
+            video.play()
+            setisPlaying(true)
+          } else {
+            video.pause()
+            setisPlaying(false)
+          }
+        }, { threshold: 0.6 })
+    
+        if (videoTag.current) {
+          observer.observe(videoTag.current)
+        }
+    
+        return () => {
+          if (videoTag.current) {
+            observer.unobserve(videoTag.current)
+          }
+        }  
+    
+      }, [])
+
+
+
     return (
         <div className='h-[100%] relative cursor-pointer max-w-full 
         rounded-2xl overflow-hidden'>
@@ -31,10 +57,10 @@ const VideoPlayer = ({ media }) => {
                 onClick={() => setmute(!mute)}>
                 {
                     !mute ?
-                        <FaVolumeXmark className='w-[20px h-[20px] text-white
+                        <FaVolumeXmark className='w-[20px] h-[20px] text-white
                         font-semibold' />
                         :
-                        <FaVolumeLow className='w-[20px h-[20px] text-white
+                        <FaVolumeLow className='w-[20px] h-[20px] text-white
                         font-semibold' />
                 }
             </div>
