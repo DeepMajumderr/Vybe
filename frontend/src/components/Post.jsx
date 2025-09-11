@@ -42,7 +42,7 @@ const Post = ({ post }) => {
                 { message }, { withCredentials: true })
             const updatedPost = result.data
 
-            const updatedPosts = postData.map(p => p._id == updatedPost._id ? updatedPost : p)
+            const updatedPosts = loopData.map(p => p._id == updatedPost._id ? updatedPost : p)
             dispatch(setPostData(updatedPosts))
             setmessage("")
         } catch (error) {

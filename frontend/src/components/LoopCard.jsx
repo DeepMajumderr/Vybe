@@ -2,6 +2,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FaVolumeLow, FaVolumeXmark } from 'react-icons/fa6'
 import dp from "../assets/dp.jpg"
 import FollowButton from './FollowButton'
+import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io'
+import { useDispatch, useSelector } from 'react-redux'
+import { MdOutlineComment } from "react-icons/md";
+import { serverUrl } from '../App'
+import { setLoopData } from '../redux/loopSlice'
+import axios from 'axios'
 
 const LoopCard = ({ loop }) => {
 
@@ -9,6 +15,12 @@ const LoopCard = ({ loop }) => {
   const [isPlaying, setisPlaying] = useState(true)
   const [isMute, setisMute] = useState(true)
   const [progress, setprogress] = useState(0)
+  const { userData } = useSelector(state => state.user)
+  const { loopData } = useSelector(state => state.loop)
+  const dispatch = useDispatch()
+  const [showHeart, setshowHeart] = useState(false)
+  const [showComment, setshowComment] = useState(false)
+  const commentRef = useRef()
 
   const handleTimeUpdate = () => {
     const video = videoRef.current
@@ -53,15 +65,72 @@ const LoopCard = ({ loop }) => {
 
   }, [])
 
+  useEffect(() => {
+
+    const handleClickOutside = (e) => {
+      if(commentRef.current && !commentRef.current.contains(e.target) ) {
+        
+      }
+    }
+
+    if(showComment) {
+      document.addEventListener("mousedown", handleClickOutside)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+
+  }, [showComment])
+  
+
+  const handleLike = async () => {
+    try {
+      const result = await axios.get(`${serverUrl}/api/loop/like/${loop._id}`,
+        { withCredentials: true })
+      const updatedLoop = result.data
+
+      const updatedLoops = loopData.map(l => l._id == loop._id ? updatedLoop : l)
+      dispatch(setLoopData(updatedLoops))
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleLikeOnDoubleClick = () => {
+    setshowHeart(true)
+    setTimeout(() => setshowHeart(false), 6000)
+    { !loop.likes.includes(userData._id) ? handleLike() : null }
+  }
+
 
   return (
 
     <div className='w-full lg:w-[480px] h-[100vh] flex items-center
-    justify-center border-l-2 border-r-2 border-gray-800 relative'>
+    justify-center border-l-2 border-r-2 border-gray-800 relative overflow-hidden'>
+
+      {showHeart &&
+        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 
+      -translate-y-1/2 heart-animation z-50'>
+
+          <IoMdHeart className='w-[100px]  h-[100px] text-white drop-shadow-2xl' />
+
+        </div>}
+
+      <div ref={commentRef} className={`absolute z-[200] bottom-0 w-full h-[500px]
+      p-[10px] rounded-t-4xl bg-[#0e1718] transition-transform 
+      duration-500 ease-in-out left-0 shadow-2xl shadow-black ${showComment ? 
+      "translate-y-0" : "translate-y-[100%] "}`}>
+
+        <h1 className='text-white text-[20px] text-center font-semibold'>
+          Comments
+        </h1>
+
+      </div>
 
       <video ref={videoRef} autoPlay muted loop src={loop?.media}
         className='w-full max-h-full'
-        onClick={handleClick} onTimeUpdate={handleTimeUpdate} />
+        onClick={handleClick} onTimeUpdate={handleTimeUpdate}
+        onDoubleClick={handleLikeOnDoubleClick} />
 
       <div className='absolute top-[20px] right-[20px] z-[100]'
         onClick={() => setisMute(!isMute)}>
@@ -112,19 +181,36 @@ const LoopCard = ({ loop }) => {
         </div>
 
         <div className='absolute right-0  flex flex-col gap-[20px]
-        text-white bottom-[100px] justify-center px-[10px]'>
+        text-white bottom-[130px] justify-center px-[10px]'>
 
           <div className='flex flex-col items-center cursor-pointer'>
 
-            <div>
-              
+            <div onClick={handleLike}>
+
+              {
+                !loop.likes.includes(userData._id) &&
+                <IoMdHeartEmpty className='w-[25px] cursor-pointer h-[25px]' />
+              }
+              {
+                loop.likes.includes(userData._id) &&
+                <IoMdHeart className='w-[25px] cursor-pointer h-[25px] text-red-600' />
+              }
+
             </div>
 
-            <div></div>
+            <div>{loop.likes.length}</div>
 
           </div>
 
-          <div></div>
+          <div className='flex flex-col items-center cursor-pointer ' onClick={()=>setshowComment(true)}>
+
+            <div>
+              <MdOutlineComment className='w-[25px] cursor-pointer h-[25px]' />
+            </div>
+
+            <div>{loop.comments.length}</div>
+
+          </div>
 
         </div>
 
