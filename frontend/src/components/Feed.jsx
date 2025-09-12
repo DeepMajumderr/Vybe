@@ -8,7 +8,8 @@ import Post from './Post';
 
 const Feed = () => {
 
-  const {postData} = useSelector(state => state.post)
+  const { postData } = useSelector(state => state.post)
+  const { userData } = useSelector(state => state.user)
 
   return (
     <div className='lg:w-[50%] w-full bg-black min-h-[100vh]
@@ -24,15 +25,9 @@ const Feed = () => {
 
       <div className='flex w-full justify-start overflow-x-auto gap-[10px] items-center
        p-[20px]'>
-        <StoryDp userName={"bfh"} />
-        <StoryDp userName={"bfh"} />
-        <StoryDp userName={"bfh"} />
-        <StoryDp userName={"bfhbhnhmjmj"} />
-        <StoryDp userName={"bfh"} />
-        <StoryDp userName={"bfh"} />
-        <StoryDp userName={"bfh"} />
-        <StoryDp userName={"bfh"} />
-        <StoryDp userName={"bfh"} />
+
+        <StoryDp userName={"Your Story"} profileImage={userData.profileImage} story={userData.story} />
+
       </div>
 
       <div className='w-full min-h-[100vh] flex flex-col items-center
@@ -42,8 +37,8 @@ const Feed = () => {
         <Nav />
 
         {
-          postData && 
-          postData?.map((post,index) => (
+          postData &&
+          postData?.map((post, index) => (
             <Post post={post} key={index} />
           ))
         }

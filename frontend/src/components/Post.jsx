@@ -68,8 +68,8 @@ const Post = ({ post }) => {
 
             <div className='w-full h-[80px] flex justify-between items-center 
         px-[10px]'>
-            
-                <div className='flex justify-ccenter items-center gap-[10px] md:gap-[20px]'>
+
+                <div className='flex justify-center items-center gap-[10px] md:gap-[20px]'>
 
                     <div className='w-[60px] h-[60px] md:w-[60px] h-[60px] border-2 border-black
                 rounded-full cursor-pointer overflow-hidden'>

@@ -61,7 +61,7 @@ export const comment = async (req, res) => {
         if (!loop) {
             return res.status(400).json({ message: "loop not found" })
         }
-        loop.comments.push({
+        loop.comments.unshift({
             author: req.userId,
             message
         })

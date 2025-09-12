@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FaVolumeLow, FaVolumeXmark } from 'react-icons/fa6'
 import dp from "../assets/dp.jpg"
 import FollowButton from './FollowButton'
-import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io'
+import { IoMdHeart, IoMdHeartEmpty, IoMdSend } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
 import { MdOutlineComment } from "react-icons/md";
 import { serverUrl } from '../App'
@@ -20,6 +20,7 @@ const LoopCard = ({ loop }) => {
   const dispatch = useDispatch()
   const [showHeart, setshowHeart] = useState(false)
   const [showComment, setshowComment] = useState(false)
+  const [message, setmessage] = useState("")
   const commentRef = useRef()
 
   const handleTimeUpdate = () => {
@@ -68,19 +69,19 @@ const LoopCard = ({ loop }) => {
   useEffect(() => {
 
     const handleClickOutside = (e) => {
-      if(commentRef.current && !commentRef.current.contains(e.target) ) {
-        
+      if (commentRef.current && !commentRef.current.contains(e.target)) {
+        setshowComment(false)
       }
     }
 
-    if(showComment) {
+    if (showComment) {
       document.addEventListener("mousedown", handleClickOutside)
     } else {
       document.removeEventListener("mousedown", handleClickOutside)
     }
 
   }, [showComment])
-  
+
 
   const handleLike = async () => {
     try {
@@ -95,6 +96,23 @@ const LoopCard = ({ loop }) => {
       console.log(error)
     }
   }
+
+  const handleComment = async () => {
+    try {
+      const result = await axios.post(`${serverUrl}/api/loop/comment/${loop._id}`,
+        { message }, { withCredentials: true })
+      const updatedLoop = result.data
+
+      const updatedLoops = loopData.map(l => l._id == loop._id ? updatedLoop : l)
+      setmessage('')
+      dispatch(setLoopData(updatedLoops))
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 
   const handleLikeOnDoubleClick = () => {
     setshowHeart(true)
@@ -118,12 +136,71 @@ const LoopCard = ({ loop }) => {
 
       <div ref={commentRef} className={`absolute z-[200] bottom-0 w-full h-[500px]
       p-[10px] rounded-t-4xl bg-[#0e1718] transition-transform 
-      duration-500 ease-in-out left-0 shadow-2xl shadow-black ${showComment ? 
-      "translate-y-0" : "translate-y-[100%] "}`}>
+      duration-500 ease-in-out left-0 shadow-2xl shadow-black ${showComment ?
+          "translate-y-0" : "translate-y-[100%] "}`}>
 
         <h1 className='text-white text-[20px] text-center font-semibold'>
           Comments
         </h1>
+
+        <div className='w-full h-[350px] overflow-y-auto flex flex-col gap-[20px]'>
+
+          {
+            loop.comments?.length == 0 &&
+            <div className='text-center text-white text-[20px] font-semibold mt-[50px]'>
+              No comments yet
+            </div>
+          }
+
+          {
+            loop.comments?.map((com, index) => (
+
+              <div className='w-full flex flex-col gap-[5px]
+              border-b-[1px] border-gray-800 justify-center pb-[10px] mt-[10px]'>
+
+                <div className='flex justify-start items-center gap-[10px] md:gap-[20px]'>
+
+                  <div className='w-[30px] h-[30px] md:w-[30px] h-[30px] border-2 border-black
+                              rounded-full cursor-pointer overflow-hidden'>
+                    <img src={com.author?.profileImage || dp} alt=""
+                      className='w-full object-cover' />
+                  </div>
+
+                  <div className='w-[150px] font-semibold text-white truncate'>
+                    {com.author?.userName}
+                  </div>
+
+                </div>
+
+                <div className='text-white pl-[40px]'>
+                  {com.message}
+                </div>
+
+              </div>
+
+            ))
+          }
+
+        </div>
+
+        <div className='w-full fixed bottom-0  h-[80px] flex items-center
+                    justify-between px-[20px] py-[20px] '>
+
+          <div className='w-[30px] h-[30px] md:w-[30px] h-[30px] border-2 border-black
+                    rounded-full cursor-pointer overflow-hidden'>
+            <img src={userData?.profileImage || dp} alt=""
+              className='w-full object-cover' />
+          </div>
+          <input type="text" className='px-[10px] border-b-2 border-b-gray-500 w-[90%]
+                        outline-none h-[40px] text-white placeholder:text-white'
+            placeholder='Write comment...' value={message}
+            onChange={(e) => setmessage(e.target.value)} />
+
+          {message &&
+            <button className='absolute  right-[20px] cursor-pointer' onClick={handleComment}>
+              <IoMdSend className='w-[25px] h-[25px] text-white' />
+            </button>}
+        </div>
 
       </div>
 
@@ -171,8 +248,14 @@ const LoopCard = ({ loop }) => {
             {loop.author?.userName}
           </div>
 
-          <FollowButton targetUserId={loop.author?._id}
-            tailwind={'px-[10px] py-[5px] cursor-pointer text-white border-2 text-[14px] border-white rounded-2xl'} />
+
+          {
+            loop.author?._id !== userData._id &&
+
+            < FollowButton targetUserId={loop.author?._id}
+          tailwind={'ml-[-30px] px-[10px] py-[5px] cursor-pointer text-white border-2 text-[14px] border-white rounded-2xl'} />
+          }
+
 
         </div>
 
@@ -202,7 +285,7 @@ const LoopCard = ({ loop }) => {
 
           </div>
 
-          <div className='flex flex-col items-center cursor-pointer ' onClick={()=>setshowComment(true)}>
+          <div className='flex flex-col items-center cursor-pointer ' onClick={() => setshowComment(true)}>
 
             <div>
               <MdOutlineComment className='w-[25px] cursor-pointer h-[25px]' />
