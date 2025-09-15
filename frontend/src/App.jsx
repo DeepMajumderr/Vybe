@@ -13,6 +13,7 @@ import Upload from './pages/Upload'
 import getAllPost from './hooks/getAllPost'
 import Loops from './pages/Loops'
 import getAllLoops from './hooks/getAllLoops'
+import Story from './pages/Story'
 export const serverUrl = "http://localhost:8000"
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
       <Route path='/forgot-password' element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />} />
       <Route path='/upload' element={userData ? <Upload /> : <Navigate to={"/signin"} />} />
       <Route path='/profile/:userName' element={userData ? <Profile /> : <Navigate to={"/signin"} />} />
+      <Route path='/story/:userName' element={userData ? <Story /> : <Navigate to={"/signin"} />} />
       <Route path='/editprofile' element={userData ? <EditProfile /> : <Navigate to={"/signin"} />} />
       <Route path='/loops' element={userData ? <Loops /> : <Navigate to={"/signin"} />} />
     </Routes>

@@ -10,6 +10,7 @@ import { setPostData } from '../redux/postSlice'
 import { setStoryData } from '../redux/storySlice'
 import { setLoopData } from '../redux/loopSlice'
 import { ClipLoader } from 'react-spinners'
+import { setUserData } from '../redux/userSlice'
 
 const Upload = () => {
     const navigate = useNavigate()
@@ -63,7 +64,7 @@ const Upload = () => {
             const result = await axios.post(`${serverUrl}/api/story/uploadStory`,
                 formData, { withCredentials: true })
 
-            dispatch(setStoryData([...storyData, result.data]))
+            setUserData((prev) => ({ ...prev, story: result.data }))
             setloading(false)
             navigate("/")
         } catch (error) {
@@ -146,8 +147,8 @@ const Upload = () => {
                 border-gray-800 border-2 flex flex-col items-center justify-center gap-[8px]
                 mt-[15vh] rounded-2xl cursor-pointer hover:bg-[#353a3d]'
                     onClick={() => mediaInput.current.click()}>
-                    <input type="file" accept={uploadType == "loop" ? "video/* " : ""} 
-                    hidden ref={mediaInput}
+                    <input type="file" accept={uploadType == "loop" ? "video/* " : ""}
+                        hidden ref={mediaInput}
                         onChange={handleMedia} />
                     <FaRegSquarePlus className='text-white w-[25px] h-[25px] cursor-pointer' />
                     <div className='text-white text-[19px] font-semibold'>Upload {uploadType}</div>
@@ -201,12 +202,12 @@ const Upload = () => {
                 mt-[50px] cursor-pointer rounded-2xl'
                     onClick={handleUpload}>
                     {
-                        loading?
-                        <ClipLoader size={30} color='black' />
-                        :
-                        `Upload ${uploadType}`
+                        loading ?
+                            <ClipLoader size={30} color='black' />
+                            :
+                            `Upload ${uploadType}`
                     }
-                    
+
                 </button>
             }
 

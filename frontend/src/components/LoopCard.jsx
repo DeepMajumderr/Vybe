@@ -253,7 +253,7 @@ const LoopCard = ({ loop }) => {
             loop.author?._id !== userData._id &&
 
             < FollowButton targetUserId={loop.author?._id}
-          tailwind={'ml-[-30px] px-[10px] py-[5px] cursor-pointer text-white border-2 text-[14px] border-white rounded-2xl'} />
+              tailwind={'ml-[-30px] px-[10px] py-[5px] cursor-pointer text-white border-2 text-[14px] border-white rounded-2xl'} />
           }
 
 
