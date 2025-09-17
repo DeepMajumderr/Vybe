@@ -10,6 +10,8 @@ const Feed = () => {
 
   const { postData } = useSelector(state => state.post)
   const { userData } = useSelector(state => state.user)
+  const { storyList,currentUserStory } = useSelector(state => state.story)
+  console.log(currentUserStory?.author?.profileImage)
 
   return (
     <div className='lg:w-[50%] w-full bg-black min-h-[100vh]
@@ -26,7 +28,15 @@ const Feed = () => {
       <div className='flex w-full justify-start overflow-x-auto gap-[10px] items-center
        p-[20px]'>
 
-        <StoryDp userName={"Your Story"} profileImage={userData.profileImage} story={userData.story} />
+        <StoryDp userName={"Your Story"} profileImage={userData?.profileImage} story={currentUserStory} />
+        
+        {
+          storyList?.map((story,index) => (
+            <StoryDp userName={story?.author?.userName} 
+            profileImage={story?.author?.profileImage} story={story}
+            key={index} />
+          ))
+        }
 
       </div>
 

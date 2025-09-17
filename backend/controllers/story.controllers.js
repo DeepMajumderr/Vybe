@@ -90,7 +90,7 @@ export const getAllStories = async(req,res) => {
             author: {$in:followingIds}
         }).populate("viewers author").sort({createdAt:-1})
 
-        return Response.status(200).json(stories)
+        return res.status(200).json(stories)
     } catch (error) {
         return res.status(500).json({ message: "Get all story error" })
     }

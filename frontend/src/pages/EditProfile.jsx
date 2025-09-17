@@ -103,23 +103,23 @@ const EditProfile = () => {
 
             <input type="text" className='w-[90%] max-w-[600px] h-[60px] bg-[#0a1010]
             border-2 border-gray-700 rounded-2xl text-white font-semibold  px-[20px] outline-none'
-                placeholder='Enter your name...' onChange={(e) => setname(e.target.value)} value={name} />
+                placeholder='Enter your name...' onChange={(e) => setname(e.target.value)} value={name} required />
 
             <input type="text" className='w-[90%] max-w-[600px] h-[60px] bg-[#0a1010]
             border-2 border-gray-700 rounded-2xl text-white font-semibold  px-[20px] outline-none'
-                placeholder='Enter your userName...' onChange={(e) => setuserName(e.target.value)} value={userName} />
+                placeholder='Enter your userName...' onChange={(e) => setuserName(e.target.value)} value={userName} required />
 
             <input type="text" className='w-[90%] max-w-[600px] h-[60px] bg-[#0a1010]
             border-2 border-gray-700 rounded-2xl text-white font-semibold  px-[20px] outline-none'
-                placeholder='Enter your Bio...' onChange={(e) => setbio(e.target.value)} value={bio} />
+                placeholder='Enter your Bio...' onChange={(e) => setbio(e.target.value)} value={bio} required/>
 
             <input type="text" className='w-[90%] max-w-[600px] h-[60px] bg-[#0a1010]
             border-2 border-gray-700 rounded-2xl text-white font-semibold  px-[20px] outline-none'
-                placeholder='Enter your Profession...' onChange={(e) => setprofession(e.target.value)} value={profession} />
+                placeholder='Enter your Profession...' onChange={(e) => setprofession(e.target.value)} value={profession} required />
 
             <input type="text" className='w-[90%] max-w-[600px] h-[60px] bg-[#0a1010]
             border-2 border-gray-700 rounded-2xl text-white font-semibold  px-[20px] outline-none'
-                placeholder='Enter your Gender...' onChange={(e) => setgender(e.target.value)} value={gender} />
+                placeholder='Enter your Gender...' onChange={(e) => setgender(e.target.value)} value={gender} required />
 
             <button className='px-[10px] w-[60%] max-w-[400px] py-[5px] h-[50px] bg-[white]
             cursor-pointer rounded-2xl' onClick={handleEditProfile}>

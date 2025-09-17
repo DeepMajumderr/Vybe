@@ -3,9 +3,10 @@ import dp from "../assets/dp.jpg"
 import { useSelector } from 'react-redux'
 import { MdKeyboardBackspace } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
+import VideoPlayer from './VideoPlayer'
 
-const StoryCard = () => {
-  const { storyData } = useSelector(state => state.story)
+const StoryCard = ({storyData}) => {
+  
   const navigate = useNavigate()
   const [progress, setprogress] = useState(0)
 
@@ -35,14 +36,14 @@ const StoryCard = () => {
         <MdKeyboardBackspace className='text-white w-[25px] h-[25px] cursor-pointer'
           onClick={() => navigate(`/`)} />
 
-        <div className='w-[30px] h-[30px] md:w-[40px] h-[40px] border-2 border-black
+        <div className='w-[40px] h-[40px] md:w-[40px] h-[40px] border-2 border-black
                     rounded-full cursor-pointer overflow-hidden' >
-          <img src={storyData.author?.profileImage || dp} alt=""
+          <img src={storyData?.author?.profileImage || dp} alt=""
             className='w-full object-cover' />
         </div>
 
         <div className='w-[120px] font-semibold truncate text-white'>
-          {storyData.author?.userName}
+          {storyData?.author?.userName}
         </div>
 
       </div>
@@ -51,17 +52,17 @@ const StoryCard = () => {
                 flex  items-center justify-center '>
 
         {
-          storyData.mediaType == "image" &&
+          storyData?.mediaType == "image" &&
           <div className='w-[full] h-[90vh] flex items-center justify-center '>
-            <img src={storyData.media} alt="" className='w-[80%]
+            <img src={storyData?.media} alt="" className='w-[80%]
                             rounded-2xl  object-cover' />
           </div>
         }
 
         {
-          storyData.mediaType == "video" &&
+          storyData?.mediaType == "video" &&
           <div className='w-[80%] flex flex-col items-center justify-center'>
-            <VideoPlayer media={storyData.media} />
+            <VideoPlayer media={storyData?.media} />
           </div>
         }
 

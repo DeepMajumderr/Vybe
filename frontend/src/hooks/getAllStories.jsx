@@ -8,6 +8,7 @@ const getAllStories = () => {
 
     const dispatch = useDispatch()
     const {userData} = useSelector(state => state.user)
+    const {storyData} = useSelector(state => state.story)
     // console.log(storyData)
 
     useEffect(() => {
@@ -23,7 +24,7 @@ const getAllStories = () => {
         }
 
         fetchStories()
-    }, [userData])
+    }, [userData,storyData])
 
 }
 

@@ -3,6 +3,7 @@ import { serverUrl } from '../App'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setFollowing, setUserData } from '../redux/userSlice'
+import { setCurrentUserStory } from '../redux/storySlice'
 
 const getCurrentUser = () => {
 
@@ -17,6 +18,7 @@ const getCurrentUser = () => {
                     { withCredentials: true })
                 dispatch(setUserData(result.data))
                 dispatch(setFollowing(result.data.following))
+                dispatch(setCurrentUserStory(result.data.story))
 
             } catch (error) {
                 console.log(error)
