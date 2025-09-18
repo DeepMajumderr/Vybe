@@ -13,6 +13,7 @@ import { setPostData } from '../redux/postSlice';
 import axios from 'axios';
 import { setUserData } from '../redux/userSlice';
 import FollowButton from './FollowButton';
+import { useNavigate } from 'react-router-dom';
 
 const Post = ({ post }) => {
 
@@ -21,6 +22,7 @@ const Post = ({ post }) => {
     const [showComment, setshowComment] = useState(false)
     const [message, setmessage] = useState("")
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleLike = async () => {
         try {
@@ -72,13 +74,14 @@ const Post = ({ post }) => {
                 <div className='flex justify-center items-center gap-[10px] md:gap-[20px]'>
 
                     <div className='w-[60px] h-[60px] md:w-[60px] h-[60px] border-2 border-black
-                rounded-full cursor-pointer overflow-hidden'>
+                rounded-full cursor-pointer overflow-hidden'  
+                onClick = {() => navigate(`/profile/${post?.author?.userName}`)}>
                         <img src={post.author?.profileImage || dp} alt=""
                             className='w-full object-cover' />
                     </div>
 
                     <div className='w-[150px] font-semibold truncate'>
-                        {post.author?.userName}
+                        {post?.author?.userName}
                     </div>
 
                 </div>

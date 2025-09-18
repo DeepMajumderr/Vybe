@@ -3,6 +3,8 @@ import dp from "../assets/dp.jpg"
 import { GoPlusCircle } from "react-icons/go";
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { serverUrl } from '../App';
 
 
 const StoryDp = ({ profileImage, userName, story }) => {
@@ -10,13 +12,24 @@ const StoryDp = ({ profileImage, userName, story }) => {
     const navigate = useNavigate()
     const { userData } = useSelector(state => state.user)
 
+    const handleViewers = async () => {
+        try {
+            const result = await axios.get(`${serverUrl}/api/story/view/${story._id}`, { withCredentials: true })
+            console.log(result.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleClick = () => {
         if (!story && userName == "Your Story") {
             navigate("/upload")
         } else if (story && userName == "Your Story") {
+            handleViewers()
             navigate(`/story/${userData.userName}`)
         } else {
-              navigate(`/story/${userName}`)
+            handleViewers()
+            navigate(`/story/${userName}`)
         }
     }
 

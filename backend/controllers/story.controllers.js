@@ -36,15 +36,19 @@ export const uploadStory = async (req, res) => {
 }
 
 export const viewStory = async (req, res) => {
+    
     try {
+
         const storyId = req.params.storyId
         const story = await Story.findById(storyId)
+
 
         if (!story) {
             return res.status(400).json({ message: "story not found" })
         }
 
         const viewersIds = story.viewers.map(id => id.toString())
+
         if (!viewersIds.includes(req.userId.toString())) {
             story.viewers.push(req.userId)
             await story.save()
@@ -61,6 +65,7 @@ export const viewStory = async (req, res) => {
         return res.status(500).json({ message: "story view error" })
     }
 }
+
 
 export const getStoryByUserName = async (req, res) => {
     try {
@@ -81,14 +86,15 @@ export const getStoryByUserName = async (req, res) => {
     }
 }
 
-export const getAllStories = async(req,res) => {
+
+export const getAllStories = async (req, res) => {
     try {
         const currentUser = await User.findById(req.userId)
         const followingIds = currentUser.following
 
         const stories = await Story.find({
-            author: {$in:followingIds}
-        }).populate("viewers author").sort({createdAt:-1})
+            author: { $in: followingIds }
+        }).populate("viewers author").sort({ createdAt: -1 })
 
         return res.status(200).json(stories)
     } catch (error) {

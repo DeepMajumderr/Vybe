@@ -4,11 +4,13 @@ import { useSelector } from 'react-redux'
 import { MdKeyboardBackspace } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import VideoPlayer from './VideoPlayer'
+import { FaEye } from "react-icons/fa";
 
-const StoryCard = ({storyData}) => {
-  
+const StoryCard = ({ storyData }) => {
+
   const navigate = useNavigate()
   const [progress, setprogress] = useState(0)
+  const { userData } = useSelector(state => state.user)
 
   useEffect(() => {
 
@@ -77,6 +79,18 @@ const StoryCard = ({storyData}) => {
         </div>
 
       </div>
+
+      {
+        storyData?.author?.userName == userData?.userName &&
+        <div className='w-full h-[70px] text-white absolute bottom-0 p-2 left-0'>
+
+          <div className='text-white flex items-center gap-[5px]'>
+            <FaEye /> {storyData.viewers.length}
+          </div>
+
+        </div>
+      }
+
 
     </div>
   )
