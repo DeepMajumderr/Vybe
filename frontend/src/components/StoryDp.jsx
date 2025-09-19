@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import dp from "../assets/dp.jpg"
 import { GoPlusCircle } from "react-icons/go";
 import { useNavigate } from 'react-router-dom'
@@ -11,11 +11,25 @@ const StoryDp = ({ profileImage, userName, story }) => {
 
     const navigate = useNavigate()
     const { userData } = useSelector(state => state.user)
+    const { storyData, storyList } = useSelector(state => state.story)
+    const [viewed, setviewed] = useState(false)
+
+    useEffect(() => {
+        if (story?.viewers?.some((viewer) =>
+            viewer._id?.toString() === userData._id?.toString() || viewer?.toString() == userData._id?.toString()
+        )) {
+            setviewed(true)
+        } else {
+            setviewed(true)
+        }
+
+
+    }, [story, userData, storyData, storyList])
+
 
     const handleViewers = async () => {
         try {
             const result = await axios.get(`${serverUrl}/api/story/view/${story._id}`, { withCredentials: true })
-            console.log(result.data)
         } catch (error) {
             console.log(error)
         }
@@ -25,7 +39,6 @@ const StoryDp = ({ profileImage, userName, story }) => {
         if (!story && userName == "Your Story") {
             navigate("/upload")
         } else if (story && userName == "Your Story") {
-            handleViewers()
             navigate(`/story/${userData.userName}`)
         } else {
             handleViewers()
@@ -36,8 +49,8 @@ const StoryDp = ({ profileImage, userName, story }) => {
     return (
         <div className='flex flex-col w-[80px]' >
 
-            <div className={`w-[70px] h-[70px] ${story ? "bg-gradient-to-b from-blue-500 to-blue-950"
-                : ""} rounded-full flex justify-center items-center relative`}
+            <div className={`w-[70px] h-[70px] ${!story ? null : !viewed ? "bg-gradient-to-b from-blue-500 to-blue-950" : "bg-gradient-to-b from-gray-500 to-black-950"}
+            rounded-full flex justify-center items-center relative`}
                 onClick={handleClick}>
 
                 <div className='w-[60px] h-[60px] border-2 border-black

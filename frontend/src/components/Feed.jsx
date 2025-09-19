@@ -11,7 +11,7 @@ const Feed = () => {
   const { postData } = useSelector(state => state.post)
   const { userData } = useSelector(state => state.user)
   const { storyList,currentUserStory } = useSelector(state => state.story)
-  console.log(currentUserStory)
+  
 
   return (
     <div className='lg:w-[50%] w-full bg-black min-h-[100vh]

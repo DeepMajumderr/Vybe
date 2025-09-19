@@ -36,7 +36,8 @@ export const uploadStory = async (req, res) => {
 }
 
 export const viewStory = async (req, res) => {
-    
+
+
     try {
 
         const storyId = req.params.storyId
