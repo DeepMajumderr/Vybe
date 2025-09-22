@@ -16,11 +16,11 @@ const StoryDp = ({ profileImage, userName, story }) => {
 
     useEffect(() => {
         if (story?.viewers?.some((viewer) =>
-            viewer._id?.toString() === userData._id?.toString() || viewer?.toString() == userData._id?.toString()
+            viewer._id?.toString() == userData._id?.toString()
         )) {
             setviewed(true)
         } else {
-            setviewed(true)
+            setviewed(false)
         }
 
 
