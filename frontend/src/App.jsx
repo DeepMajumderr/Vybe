@@ -15,6 +15,8 @@ import Loops from './pages/Loops'
 import getAllLoops from './hooks/getAllLoops'
 import Story from './pages/Story'
 import getAllStories from './hooks/getAllStories'
+import Messages from './pages/Messages'
+import MessageArea from './pages/MessageArea'
 export const serverUrl = "http://localhost:8000"
 
 const App = () => {
@@ -37,6 +39,8 @@ const App = () => {
       <Route path='/profile/:userName' element={userData ? <Profile /> : <Navigate to={"/signin"} />} />
       <Route path='/story/:userName' element={userData ? <Story /> : <Navigate to={"/signin"} />} />
       <Route path='/editprofile' element={userData ? <EditProfile /> : <Navigate to={"/signin"} />} />
+      <Route path='/messages' element={userData ? <Messages /> : <Navigate to={"/signin"} />} />
+      <Route path='/messageArea' element={userData ? <MessageArea /> : <Navigate to={"/signin"} />} />
       <Route path='/loops' element={userData ? <Loops /> : <Navigate to={"/signin"} />} />
     </Routes>
   )

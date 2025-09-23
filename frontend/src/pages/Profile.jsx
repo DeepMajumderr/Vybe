@@ -9,6 +9,7 @@ import dp from "../assets/dp.jpg"
 import Nav from '../components/Nav'
 import FollowButton from '../components/FollowButton'
 import Post from '../components/Post'
+import { setSelectedUser } from '../redux/messageSlice'
 
 
 const Profile = () => {
@@ -198,7 +199,10 @@ const Profile = () => {
                         />
 
                         <button className='mt-[-35px] px-[10px] min-w-[150px] py-[5px] h-[40px]
-                        bg-[white] cursor-pointer rounded-2xl'>
+                        bg-[white] cursor-pointer rounded-2xl' onClick={() => {
+                            dispatch(setSelectedUser(profileData)) 
+                            navigate("/messageArea")
+                        }}>
                             Message
                         </button>
                     </>
