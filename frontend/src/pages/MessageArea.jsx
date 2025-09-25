@@ -30,11 +30,18 @@ const MessageArea = () => {
     const handleSendMessage = async (e) => {
         e.preventDefault()
         try {
+            const formData = new FormData()
+            formData.append("message",input)
+            if(backendImage){
+                formData.append("image",backendImage)
+            }
             const result = await axios.post(`${serverUrl}/api/message/send/${selectedUser._id}`,
-                { message: input }, { withCredentials: true }
+                formData, { withCredentials: true }
             )
             dispatch(setMessages([...messages, result.data]))
             setinput('')
+            setbackendImage(null)
+            setfrontendImage(null)
         } catch (error) {
             console.log(error)
         }
@@ -46,7 +53,6 @@ const MessageArea = () => {
                 { withCredentials: true }
             )
             dispatch(setMessages(result.data))
-            console.log(result.data)
         } catch (error) {
             console.log(error)
         }
@@ -87,15 +93,15 @@ const MessageArea = () => {
 
             </div>
 
-            <div className='w-full h-[80%] pt-[100px] pb-[120px] lg:pb-[150px] 
+            <div className='w-full h-[80%] pt-[100px] 
             px-[40px] flex flex-col gap-[50px] overflow-auto bg-black'>
 
                 {messages && messages?.map((mess, index) => (
-                mess.sender == userData._id ?
-                <SenderMessage key={index} message={mess} />
-                :
-                <ReceiverMessage key={index} message={mess} /> 
-               ))}
+                    mess.sender == userData._id ?
+                        <SenderMessage key={index} message={mess} />
+                        :
+                        <ReceiverMessage key={index} message={mess} />
+                ))}
 
             </div>
 
