@@ -20,6 +20,8 @@ import MessageArea from './pages/MessageArea'
 export const serverUrl = "http://localhost:8000"
 import { io } from "socket.io-client"
 import { setOnlineUsers, setSocket } from './redux/socketSlice'
+import getFollowigList from './hooks/getFollowingList'
+import getPrevChatUsers from './hooks/getPrevChatUsers'
 
 const App = () => {
 
@@ -28,6 +30,9 @@ const App = () => {
   getAllPost()
   getAllLoops()
   getAllStories()
+  getFollowigList()
+  getPrevChatUsers()
+  
   const { userData } = useSelector(state => state.user)
   const { socket } = useSelector(state => state.socket)
   const dispatch = useDispatch()
@@ -43,15 +48,17 @@ const App = () => {
 
       socketIo.on('getOnlineUsers', (users) => {
         dispatch(setOnlineUsers(users))
-        console.log(users)
       })
 
       return () => socketIo.close()
+
     } else {
+
       if (socket) {
         socket.close()
         dispatch(setSocket(null))
       }
+      
     }
 
   }, [userData])

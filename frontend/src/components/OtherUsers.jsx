@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import dp from "../assets/dp.jpg"
 import { useNavigate } from 'react-router-dom'
 import FollowButton from './FollowButton'
+import dp from "../assets/dp.jpg"
 
 const OtherUsers = ({ user }) => {
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setFollowing, setUserData } from '../redux/userSlice'
 import { setCurrentUserStory } from '../redux/storySlice'
 
-const getCurrentUser = () => {
+const getFollowigList = () => {
 
     const dispatch = useDispatch()
     const {storyData} = useSelector(state => state.story)
@@ -14,11 +14,10 @@ const getCurrentUser = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const result = await axios.get(`${serverUrl}/api/user/current`,
+                const result = await axios.get(`${serverUrl}/api/user/followingList`,
                     { withCredentials: true })
-                dispatch(setUserData(result.data))
-                dispatch(setCurrentUserStory(result.data.story))
-
+                
+                dispatch(setFollowing(result.data))
             } catch (error) {
                 console.log(error)
             }
@@ -29,4 +28,4 @@ const getCurrentUser = () => {
 
 }
 
-export default getCurrentUser
+export default getFollowigList
