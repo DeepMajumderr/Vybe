@@ -14,6 +14,7 @@ import ReceiverMessage from '../components/ReceiverMessage';
 const MessageArea = () => {
     const { selectedUser, messages } = useSelector(state => state.message)
     const { userData } = useSelector(state => state.user)
+    const { socket } = useSelector(state => state.socket)
     const navigate = useNavigate()
     const [input, setinput] = useState("")
     const imageInput = useRef()
@@ -31,9 +32,9 @@ const MessageArea = () => {
         e.preventDefault()
         try {
             const formData = new FormData()
-            formData.append("message",input)
-            if(backendImage){
-                formData.append("image",backendImage)
+            formData.append("message", input)
+            if (backendImage) {
+                formData.append("image", backendImage)
             }
             const result = await axios.post(`${serverUrl}/api/message/send/${selectedUser._id}`,
                 formData, { withCredentials: true }
@@ -61,6 +62,15 @@ const MessageArea = () => {
     useEffect(() => {
         getAllMessages()
     }, [])
+
+    useEffect(() => {
+        socket.on("newMessage", (mess) => {
+            dispatch(setMessages([...messages, mess]))
+        })
+        
+        return () => socket?.off("newMessage")
+    }, [messages, setMessages])
+
 
 
     return (

@@ -5,7 +5,7 @@ export const getCurrentUser = async (req, res) => {
     try {
         const userId = req.userId
         const user = await User.findById(userId)
-        .populate("posts loops posts.author posts.comments story following")
+            .populate("posts loops posts.author posts.comments story following")
         if (!user) {
             return res.status(400).json({ message: "user not found" })
         }
@@ -69,7 +69,7 @@ export const getProfile = async (req, res) => {
     try {
         const userName = req.params.userName
         const user = await User.findOne({ userName }).select("-password")
-        .populate("posts loops followers following")
+            .populate("posts loops followers following")
 
         if (!user) {
             return res.status(400).json({ message: "user not found" })
@@ -130,11 +130,33 @@ export const follow = async (req, res) => {
     }
 }
 
-export const followingList = async(req,res) => {
+export const followingList = async (req, res) => {
     try {
         const result = await User.findById(req.userId)
         return res.status(200).json(result?.following)
     } catch (error) {
-         return res.status(500).json({ message: `Following error ${error}` })
+        return res.status(500).json({ message: `Following error ${error}` })
+    }
+}
+
+export const search = async (req, res) => {
+    try {
+        const keyWord = req.query.keyword
+
+        if (!keyWord) {
+            return res.status(400).json({ message: "keyword is required" })
+        }
+
+        const user = await User.find({
+            $or: [
+                { userName: { $regex: keyWord, $options: "i" } },
+                { name: { $regex: keyWord, $options: "i" } },
+            ]
+        }).select("-password")
+
+        return res.status(200).json(users)
+
+    } catch (error) {
+        return res.status(500).json({ message: `Search error ${error}` })
     }
 }

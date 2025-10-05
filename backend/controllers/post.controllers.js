@@ -1,6 +1,7 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
+import { io } from "../socket.js";
 
 export const uploadPost = async (req, res) => {
     try {
@@ -31,9 +32,9 @@ export const uploadPost = async (req, res) => {
 export const getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find({})
-        .populate("author", "name userName profileImage")
-        .populate("comments.author", "name userName profileImage")
-        .sort({ createdAt: -1 })
+            .populate("author", "name userName profileImage")
+            .populate("comments.author", "name userName profileImage")
+            .sort({ createdAt: -1 })
         return res.status(200).json(posts)
     } catch (error) {
         return res.status(500).json({ message: `getallposts error ${error}` })
@@ -60,6 +61,10 @@ export const like = async (req, res) => {
         await post.save()
 
         await post.populate("author", "name userName profileImage")
+        io.emit("likedPost", {
+            postId: post._id,
+            likes: post.likes
+        })
         return res.status(200).json(post)
     } catch (error) {
         return res.status(500).json({ message: `Post like error ${error}` })
@@ -81,6 +86,12 @@ export const comment = async (req, res) => {
         await post.save()
         await post.populate("author", "name userName profileImage")
         await post.populate("comments.author")
+
+        io.emit("commentedPost", {
+            postId: post._id,
+            comments: post.comments
+        })
+        
         return res.status(200).json(post)
 
     } catch (error) {
@@ -103,7 +114,7 @@ export const saved = async (req, res) => {
         }
 
         await user.save()
-        
+
         return res.status(200).json(user)
     } catch (error) {
         return res.status(500).json({ message: `save post error ${error}` })

@@ -22,7 +22,7 @@ const Nav = () => {
                 <IoHome className='text-white w-[25px] h-[25px] cursor-pointer' />
             </div>
 
-            <div>
+            <div onClick={()=>navigate("/search")}>
                 <FaSearch className='text-white w-[25px] h-[25px] cursor-pointer' />
             </div>
 

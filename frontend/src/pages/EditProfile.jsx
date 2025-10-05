@@ -74,7 +74,7 @@ const EditProfile = () => {
     return (
 
         <div className='w-full min-h-[120vh]  bg-black flex
-        items-center flex-col gap-[20px] '>
+        items-center flex-col gap-[20px]'>
 
             <div className='w-full h-[80px]  flex items-center gap-[20px] px-[20px]'>
                 <MdKeyboardBackspace className='text-white w-[25px]
@@ -111,7 +111,7 @@ const EditProfile = () => {
 
             <input type="text" className='w-[90%] max-w-[600px] h-[60px] bg-[#0a1010]
             border-2 border-gray-700 rounded-2xl text-white font-semibold  px-[20px] outline-none'
-                placeholder='Enter your Bio...' onChange={(e) => setbio(e.target.value)} value={bio} required/>
+                placeholder='Enter your Bio...' onChange={(e) => setbio(e.target.value)} value={bio} required />
 
             <input type="text" className='w-[90%] max-w-[600px] h-[60px] bg-[#0a1010]
             border-2 border-gray-700 rounded-2xl text-white font-semibold  px-[20px] outline-none'

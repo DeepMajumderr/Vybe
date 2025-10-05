@@ -14,11 +14,13 @@ import axios from 'axios';
 import { setUserData } from '../redux/userSlice';
 import FollowButton from './FollowButton';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Post = ({ post }) => {
 
     const { userData } = useSelector(state => state.user)
     const { postData } = useSelector(state => state.post)
+    const { socket } = useSelector(state => state.socket)
     const [showComment, setshowComment] = useState(false)
     const [message, setmessage] = useState("")
     const dispatch = useDispatch()
@@ -63,6 +65,27 @@ const Post = ({ post }) => {
         }
     }
 
+    useEffect(() => {
+        socket?.on("likedPost", (updatedData) => {
+            const updatedPosts = postData.map(p => p._id == updatedData.postId ? { ...p, likes: updatedData.likes } : p)
+            dispatch(setPostData(updatedPosts))
+        })
+
+        socket?.on("commentedPost", (updatedData) => {
+            const updatedPosts = postData.map(p => p._id == updatedData.postId ? { ...p, comments: updatedData.comments } : p)
+            dispatch(setPostData(updatedPosts))
+            setmessage("")
+        })
+
+        return () => {
+            socket?.off("likedPost")
+            socket?.off("commentedPost")
+        }
+
+    }, [socket, postData, dispatch])
+
+
+
 
     return (
         <div className='w-[90%]  flex flex-col gap-[10px]
@@ -74,8 +97,8 @@ const Post = ({ post }) => {
                 <div className='flex justify-center items-center gap-[10px] md:gap-[20px]'>
 
                     <div className='w-[60px] h-[60px] md:w-[60px] h-[60px] border-2 border-black
-                rounded-full cursor-pointer overflow-hidden'  
-                onClick = {() => navigate(`/profile/${post?.author?.userName}`)}>
+                rounded-full cursor-pointer overflow-hidden'
+                        onClick={() => navigate(`/profile/${post?.author?.userName}`)}>
                         <img src={post.author?.profileImage || dp} alt=""
                             className='w-full object-cover' />
                     </div>
@@ -188,7 +211,7 @@ const Post = ({ post }) => {
                     <div className='w-full max-h-[300px] overflow-auto'>
 
                         {
-                            post.comments?.map((com, index) => (
+                            post.comments?.slice().reverse().map((com, index) => (
 
                                 <div key={index}
                                     className='w-full px-[20px] py-[20px] flex items-center gap-[20px]

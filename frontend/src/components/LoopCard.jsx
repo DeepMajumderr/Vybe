@@ -17,6 +17,7 @@ const LoopCard = ({ loop }) => {
   const [progress, setprogress] = useState(0)
   const { userData } = useSelector(state => state.user)
   const { loopData } = useSelector(state => state.loop)
+  const { socket } = useSelector(state => state.socket)
   const dispatch = useDispatch()
   const [showHeart, setshowHeart] = useState(false)
   const [showComment, setshowComment] = useState(false)
@@ -119,6 +120,25 @@ const LoopCard = ({ loop }) => {
     setTimeout(() => setshowHeart(false), 6000)
     { !loop.likes.includes(userData._id) ? handleLike() : null }
   }
+
+  useEffect(() => {
+    socket?.on("likedLoop", (updatedData) => {
+      const updatedLoops = loopData.map(p => p._id == updatedData.loopId ? { ...p, likes: updatedData.likes } : p)
+      dispatch(setLoopData(updatedLoops))
+    })
+
+    socket?.on("commentedLoop", (updatedData) => {
+      const updatedLoops = loopData.map(p => p._id == updatedData.loopId ? { ...p, comments: updatedData.comments } : p)
+      dispatch(setLoopData(updatedLoops))
+      setmessage("")
+    })
+
+    return () => {
+      socket?.off("likedLoop")
+      socket?.off("commentedLoop")
+    }
+
+  }, [socket, loopData, dispatch])
 
 
   return (
