@@ -147,7 +147,7 @@ export const search = async (req, res) => {
             return res.status(400).json({ message: "keyword is required" })
         }
 
-        const user = await User.find({
+        const users = await User.find({
             $or: [
                 { userName: { $regex: keyWord, $options: "i" } },
                 { name: { $regex: keyWord, $options: "i" } },

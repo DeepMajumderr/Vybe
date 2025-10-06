@@ -1,7 +1,8 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
+import Notification from "../models/notification.model.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
-import { io } from "../socket.js";
+import { getSocketId, io } from "../socket.js";
 
 export const uploadPost = async (req, res) => {
     try {
@@ -56,6 +57,24 @@ export const like = async (req, res) => {
             post.likes = post.likes.filter(id => id.toString() != req.userId.toString())
         } else {
             post.likes.push(req.userId)
+            if (post.author._id != req.userId) {
+                const notification = await Notification.create({
+                    sender: req.userId,
+                    receiver: post.author._id,
+                    type: "like",
+                    post: post._id,
+                    message: "Liked your post"
+                })
+                const populatedNotification = await Notification.findById(notification._id).
+                    populate("sender receiver post")
+
+                const receiverSockerId = getSocketId(post.author._id)
+
+                if (receiverSockerId) {
+                    io.to(receiverSockerId).emit("newNotification", populatedNotification)
+                }
+
+            }
         }
 
         await post.save()
@@ -83,6 +102,26 @@ export const comment = async (req, res) => {
             author: req.userId,
             message
         })
+
+        if (post.author._id != req.userId) {
+            const notification = await Notification.create({
+                sender: req.userId,
+                receiver: post.author._id,
+                type: "comment",
+                post: post._id,
+                message: "Liked your comment"
+            })
+            const populatedNotification = await Notification.findById(notification._id).
+                populate("sender receiver post")
+
+            const receiverSockerId = getSocketId(post.author._id)
+
+            if (receiverSockerId) {
+                io.to(receiverSockerId).emit("newNotification", populatedNotification)
+            }
+
+        }
+
         await post.save()
         await post.populate("author", "name userName profileImage")
         await post.populate("comments.author")
@@ -91,7 +130,7 @@ export const comment = async (req, res) => {
             postId: post._id,
             comments: post.comments
         })
-        
+
         return res.status(200).json(post)
 
     } catch (error) {
