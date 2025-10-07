@@ -23,6 +23,7 @@ import { setOnlineUsers, setSocket } from './redux/socketSlice'
 import getFollowigList from './hooks/getFollowingList'
 import getPrevChatUsers from './hooks/getPrevChatUsers'
 import Search from './pages/Search'
+import getAllNotifications from './hooks/getAllNotifications'
 
 const App = () => {
 
@@ -33,6 +34,7 @@ const App = () => {
   getAllStories()
   getFollowigList()
   getPrevChatUsers()
+  getAllNotifications()
   
   const { userData } = useSelector(state => state.user)
   const { socket } = useSelector(state => state.socket)

@@ -1,5 +1,6 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import Loop from "../models/loop.model.js";
+import Notification from "../models/notification.model.js";
 import User from "../models/user.model.js";
 import { io } from "../socket.js";
 
@@ -43,6 +44,26 @@ export const like = async (req, res) => {
             loop.likes = loop.likes.filter(id => id.toString() != req.userId.toString())
         } else {
             loop.likes.push(req.userId)
+
+            if (loop.author._id != req.userId) {
+                const notification = await Notification.create({
+                    sender: req.userId,
+                    receiver: loop.author._id,
+                    type: "comment",
+                    loop: loop._id,
+                    message: "Liked your Loop"
+                })
+                const populatedNotification = await Notification.findById(notification._id).
+                    populate("sender receiver loop")
+
+                const receiverSockerId = getSocketId(loop.author._id)
+
+                if (receiverSockerId) {
+                    io.to(receiverSockerId).emit("newNotification", populatedNotification)
+                }
+
+            }
+
         }
 
         await loop.save()
@@ -72,6 +93,26 @@ export const comment = async (req, res) => {
             author: req.userId,
             message
         })
+
+        if (loop.author._id != req.userId) {
+            const notification = await Notification.create({
+                sender: req.userId,
+                receiver: loop.author._id,
+                type: "comment",
+                loop: loop._id,
+                message: "Comented on your Loop"
+            })
+            const populatedNotification = await Notification.findById(notification._id).
+                populate("sender receiver loop")
+
+            const receiverSockerId = getSocketId(loop.author._id)
+
+            if (receiverSockerId) {
+                io.to(receiverSockerId).emit("newNotification", populatedNotification)
+            }
+
+        }
+
         await loop.save()
         await loop.populate("author", "name userName profileImage")
         await loop.populate("comments.author")

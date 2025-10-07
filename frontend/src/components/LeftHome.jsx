@@ -11,8 +11,9 @@ import OtherUsers from './OtherUsers';
 
 const LeftHome = () => {
 
-  const { userData,suggestedUsers } = useSelector(state => state.user)
+  const { userData, suggestedUsers } = useSelector(state => state.user)
   const dispatch = useDispatch()
+  const { notificationData } = useSelector(state => state.user)
 
   const handleLogout = async () => {
     try {
@@ -26,17 +27,26 @@ const LeftHome = () => {
     }
   }
 
-
   return (
     <div className='w-[25%] hidden lg:block min-h-[100vh] bg-[black]
     border-r-2 border-gray-900'>
 
       <div className='w-full h-[100px] flex items-center
       justify-between p-[20px]'>
+
         <img src={logo} alt="" className='w-[80px]' />
-        <div>
-          <FaRegHeart className='text-[white] w-[25px] h-[25px]' />
+        <div className='relative'>
+          <FaRegHeart className='text-[white] w-[25px] h-[25px] cursor-pointer' />
+
+          {
+            notificationData?.length>0  && notificationData.some((noti) => noti.isRead === false) &&
+            (<div className='w-[10px] h-[10px] bg-blue-600 rounded-full absolute
+            top-0 right-[-5px]'>
+
+            </div>)
+          }
         </div>
+
       </div>
 
       <div className='flex items-center w-full justify-between gap-[10px]
@@ -66,7 +76,7 @@ const LeftHome = () => {
 
       <div className='w-full flex flex-col gap-[20px] p-[20px]'>
         <h1 className='text-[white] text-[17px]'>Suggested Users</h1>
-        {suggestedUsers && suggestedUsers.slice(0,3).map((user,index) => (
+        {suggestedUsers && suggestedUsers.slice(0, 3).map((user, index) => (
           <OtherUsers key={index} user={user} />
         ))}
       </div>

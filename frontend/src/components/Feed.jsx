@@ -11,10 +11,10 @@ import { useNavigate } from 'react-router-dom';
 const Feed = () => {
 
   const { postData } = useSelector(state => state.post)
-  const { userData } = useSelector(state => state.user)
-  const { storyList,currentUserStory } = useSelector(state => state.story)
+  const { userData,notificationData } = useSelector(state => state.user)
+  const { storyList, currentUserStory } = useSelector(state => state.story)
   const navigate = useNavigate()
-  
+
 
   return (
     <div className='lg:w-[50%] w-full bg-black min-h-[100vh]
@@ -24,9 +24,22 @@ const Feed = () => {
           justify-between  p-[20px] lg:hidden'>
         <img src={logo} alt="" className='w-[80px]' />
         <div className='flex items-center gap-[10px]'>
-          <FaRegHeart className='text-[white] w-[25px] h-[25px] cursor-pointer' />
-          <LuMessageSquareText className='text-[white] w-[25px] h-[25px] cursor-pointer' 
-          onClick={()=>navigate('/messages')}/>
+
+          <div className='relative'>
+            <FaRegHeart className='text-[white] w-[25px] h-[25px] cursor-pointer' />
+
+            {
+              notificationData?.length > 0 && notificationData.some((noti) => noti.isRead === false) &&
+              (<div className='w-[10px] h-[10px] bg-blue-600 rounded-full absolute
+                      top-0 right-[-5px]'>
+
+              </div>)
+            }
+          </div>
+
+          <LuMessageSquareText className='text-[white] w-[25px] h-[25px] cursor-pointer'
+            onClick={() => navigate('/messages')} />
+
         </div>
       </div>
 
@@ -34,12 +47,12 @@ const Feed = () => {
        p-[20px]'>
 
         <StoryDp userName={"Your Story"} profileImage={userData?.profileImage} story={currentUserStory} />
-        
+
         {
-          storyList?.map((story,index) => (
-            <StoryDp userName={story?.author?.userName} 
-            profileImage={story?.author?.profileImage} story={story}
-            key={index} />
+          storyList?.map((story, index) => (
+            <StoryDp userName={story?.author?.userName}
+              profileImage={story?.author?.profileImage} story={story}
+              key={index} />
           ))
         }
 

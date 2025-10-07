@@ -109,7 +109,7 @@ export const comment = async (req, res) => {
                 receiver: post.author._id,
                 type: "comment",
                 post: post._id,
-                message: "Liked your comment"
+                message: "Commented on your post"
             })
             const populatedNotification = await Notification.findById(notification._id).
                 populate("sender receiver post")
