@@ -197,12 +197,13 @@ export const getAllNotifications = async (req, res) => {
 
 export const markAsRead = async (req, res) => {
     try {
-        const notificationId = req.params.notificationId
+        const {notificationId} = req.body
         const notification = await Notification.findById(notificationId).
             populate("sender receiver post loop")
 
-        notification.isRead = true
-        notification.save()
+        if(Array.isArray(notificationId)) {
+
+        }
 
         return res.status(200).json({ message: "marked as read" })
 

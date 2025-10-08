@@ -25,7 +25,7 @@ const Feed = () => {
         <img src={logo} alt="" className='w-[80px]' />
         <div className='flex items-center gap-[10px]'>
 
-          <div className='relative'>
+          <div className='relative' onClick={() => navigate("/notifications")}>
             <FaRegHeart className='text-[white] w-[25px] h-[25px] cursor-pointer' />
 
             {

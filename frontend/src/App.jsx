@@ -24,6 +24,7 @@ import getFollowigList from './hooks/getFollowingList'
 import getPrevChatUsers from './hooks/getPrevChatUsers'
 import Search from './pages/Search'
 import getAllNotifications from './hooks/getAllNotifications'
+import Notifications from './pages/Notifications'
 
 const App = () => {
 
@@ -35,7 +36,7 @@ const App = () => {
   getFollowigList()
   getPrevChatUsers()
   getAllNotifications()
-  
+
   const { userData } = useSelector(state => state.user)
   const { socket } = useSelector(state => state.socket)
   const dispatch = useDispatch()
@@ -61,7 +62,7 @@ const App = () => {
         socket.close()
         dispatch(setSocket(null))
       }
-      
+
     }
 
   }, [userData])
@@ -82,6 +83,7 @@ const App = () => {
       <Route path='/editprofile' element={userData ? <EditProfile /> : <Navigate to={"/signin"} />} />
       <Route path='/messages' element={userData ? <Messages /> : <Navigate to={"/signin"} />} />
       <Route path='/messageArea' element={userData ? <MessageArea /> : <Navigate to={"/signin"} />} />
+      <Route path='/notifications' element={userData ? <Notifications /> : <Navigate to={"/signin"} />} />
       <Route path='/loops' element={userData ? <Loops /> : <Navigate to={"/signin"} />} />
     </Routes>
   )
