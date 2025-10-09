@@ -17,7 +17,7 @@ import Story from './pages/Story'
 import getAllStories from './hooks/getAllStories'
 import Messages from './pages/Messages'
 import MessageArea from './pages/MessageArea'
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = "https://vybe-backend-w6hg.onrender.com"
 import { io } from "socket.io-client"
 import { setOnlineUsers, setSocket } from './redux/socketSlice'
 import getFollowigList from './hooks/getFollowingList'
