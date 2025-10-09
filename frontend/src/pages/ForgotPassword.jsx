@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ClipLoader } from 'react-spinners'
 import axios from 'axios'
 import { serverUrl } from '../App'
+import { useNavigate } from 'react-router-dom'
 
 const ForgotPassword = () => {
 
@@ -18,6 +19,7 @@ const ForgotPassword = () => {
     const [newPassword, setnewPassword] = useState("")
     const [confirmNewPassword, setconfirmNewPassword] = useState("")
     const [error, seterror] = useState("")
+    const navigate = useNavigate()
 
     const handleStep1 = async () => {
         setloading(true)
@@ -65,6 +67,7 @@ const ForgotPassword = () => {
             setloading(false)
             setnewPassword("")
             setconfirmNewPassword("")
+            navigate("/signin")
         } catch (error) {
             console.log(error)
             setloading(false)

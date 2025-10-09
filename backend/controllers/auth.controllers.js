@@ -96,7 +96,7 @@ export const sendOtp = async (req, res) => {
         const otp = Math.floor(1000 + Math.random() * 9000).toString()
 
         user.resetOtp = otp
-        user.otpExpires =  Date.now() + 5 * 60 * 1000
+        user.otpExpires = Date.now() + 5 * 60 * 1000
         user.isOtpVerified = false
 
         await user.save()
@@ -146,6 +146,6 @@ export const resetPassword = async (req, res) => {
         return res.status(200).json({ message: "password reset successfully" })
 
     } catch (error) {
-         return res.status(500).json({ message: `reset otp error ${error}` })
+        return res.status(500).json({ message: `reset otp error ${error}` })
     }
 }
