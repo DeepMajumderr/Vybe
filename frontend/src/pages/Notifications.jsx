@@ -1,24 +1,47 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MdKeyboardBackspace } from 'react-icons/md'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import NotificationCard from '../components/NotificationCard'
 import axios from 'axios'
+import { serverUrl } from '../App'
+import { setNotificationData } from '../redux/userSlice'
 
 const Notifications = () => {
     const navigate = useNavigate()
-    const {notificationData} = useSelector(state => state.user)
+    const { notificationData } = useSelector(state => state.user)
+    const ids = notificationData.map((n) => n._id)
+    const dispatch = useDispatch()
 
-    const markAsRead = async() => {
+    const markAsRead = async () => {
         try {
-            const result = await axios
+            const result = await axios.post(`${serverUrl}/api/user/markAsRead`, { notificationId: ids }, { withCredentials: true })
+            await fetchNotifications()
         } catch (error) {
-            
+            console.log(error)
         }
     }
 
+    const fetchNotifications = async () => {
+        try {
+            const result = await axios.get(`${serverUrl}/api/user/getAllNotifications`,
+                { withCredentials: true })
+            dispatch(setNotificationData(result.data))
+            
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        markAsRead()
+        
+    }, [])
+
+
     return (
-        <div className='w-full h-[100vh] bg-black'>
+        <div className='w-full h-[100vh] bg-black overflow-auto'>
 
             <div className='w-full h-[80px]  flex items-center gap-[20px] px-[20px] 
             lg:hidden'>
@@ -33,9 +56,9 @@ const Notifications = () => {
             </div>
 
             <div className='w-full flex flex-col h-[100%] gap-[20px] 
-            overflow-auto px-[10px]'>
+             px-[10px]'>
 
-                {notificationData?.map((noti,index)=> (
+                {notificationData?.map((noti, index) => (
                     <NotificationCard noti={noti} key={index} />
                 ))}
 

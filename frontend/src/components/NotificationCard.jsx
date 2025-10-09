@@ -33,7 +33,7 @@ const NotificationCard = ({ noti }) => {
 
                 {
                     noti?.loop ?
-                        <video src={noti?.loop?.media} muted autoPlay className='h-full object-cover' />
+                        <video src={noti?.loop?.media} muted className='h-full object-cover' />
                         :
                         noti?.post?.mediaType == "image" ?
                             <img src={noti?.post?.media} className='h-full object-cover' />

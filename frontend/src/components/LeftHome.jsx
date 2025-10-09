@@ -17,7 +17,7 @@ const LeftHome = () => {
   const dispatch = useDispatch()
   const { notificationData } = useSelector(state => state.user)
   const [shownotification, setshownotification] = useState(false)
-  
+
 
   const handleLogout = async () => {
     try {
